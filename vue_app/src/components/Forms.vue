@@ -639,63 +639,51 @@ export default {
                 self.scrollController(fieldType, id)
             }
 
-            if (fieldType === 'select_auto__model') {
-                return
-            }
 
             if (fieldType === 'select_auto__year') {
 
-                self.questions[0].load.makes = true
-                self.questions[0].value.auto_make = ''
-                self.questions[0].value.auto_model = ''
+                const elem = document.querySelector('.q_item--select_auto')
+                if (elem) this.scrollToSmoothly(this.getCoords(elem).top - 80)
 
-                axios.get("https://car-api2.p.rapidapi.com/api/makes", {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-RapidAPI-Key': '1f6b885bedmshda406e131f6f802p18a97cjsn71cf71c2568c',
-                        'X-RapidAPI-Host': 'car-api2.p.rapidapi.com'
-                    },
-                    params: {
-                        direction: 'asc',
-                        sort: 'id'
-                    }
-                })
-                    .then(function (response) {
-                        self.questions[0].options.makes = [self.questions[0].options.makes[0], ...response.data.data.map(obj => obj.name)]
-                    })
-                    .catch(function (error) {
-                        console.log(error.message)
-                    })
-                    .finally(function () {
-                        self.questions[0].load.makes = false
-                    })
+                const year = self.questions[0].value.auto_year
+
+                if (!!year) {
+                    self.questions[0].load.makes = true
+                    self.questions[0].value.auto_make = ''
+                    self.questions[0].value.auto_model = ''
+
+                    axios.get('https://www.fueleconomy.gov/ws/rest/vehicle/menu/make?year=' + year)
+                        .then(function (data) {
+                            const response = data.request.response
+                            const obj = JSON.parse(response)
+                            const arr = obj.menuItem.map(elem => elem.value)
+                            self.questions[0].options.makes = [self.questions[0].options.makes[0], ...arr]
+                        })
+                        .catch(function (error) {
+                            console.log(error.message)
+                        })
+                        .finally(function () {
+                            self.questions[0].load.makes = false
+                        })
+                }
             }
 
-            if (fieldType === 'select_auto__makes') {
+            if (fieldType === 'select_auto__makes' && !!self.questions[0].value.auto_make) {
 
                 self.questions[0].load.models = true
 
-                const host = 'mc-api.marketcheck.com'
-                const api_key = 'bb2c8c2c-b483-44d9-a955-f7568a3b1091'
+                const host = 'www.fueleconomy.gov'
                 const make = self.questions[0].value.auto_make
                 const year = self.questions[0].value.auto_year
-                const url1 = 'https://' + host + '/v2/search/car/active?api_key=' + api_key + '&year=' + year + '&make=' + make + '&include_relevant_links=true'
-                const url = 'https://' + host + '/v2/search/car/active'
+                const url = 'https://' + host + '/ws/rest/vehicle/menu/model?year=' + year + '&make=' + make
 
-                axios.get(url, {
-                    headers: {},
-                    params: {
-                        api_key,
-                        year,
-                        make,
-                        include_relevant_links: !true,
-                    }
-                })
-                    .then(function (response) {
-                        self.questions[0].options.models = [
-                            self.questions[0].options.models[0],
-                            ...response.data.listings.map(obj => obj.build.model)
-                        ]
+                axios.get(url)
+                    .then(function (data) {
+                        const response = data.request.response
+                        const obj = JSON.parse(response)
+                        const arr = obj.menuItem.map(elem => elem.value)
+
+                        self.questions[0].options.models = [ self.questions[0].options.models[0], ...arr ]
                     })
                     .catch(function (error) {
                         console.log(error.message)
@@ -704,6 +692,10 @@ export default {
                         self.questions[0].load.models = false
                     })
             }
+
+            // if (fieldType === 'select_auto__model') {
+            //     return
+            // }
         },
 
         /** Validate Field */
