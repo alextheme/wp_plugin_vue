@@ -8,6 +8,24 @@ import {
 
 import motorcycle from './moto.js'
 
+// TODO: Required option Appears during the required question
+// Select ‘Not Sure’ if you don’t know what coverage you want.
+// Your Information is safe & secure
+// Insurance companies require this in order to provide an accurate quote.
+// No Spam Guaranteed
+// Your life insurance quotes are ready
+
+// TODO: Type of Ticket
+// type_of_ticket: [
+//     'Speeding less than 10 mph over',
+//     'Speeding more than 10 mph over',
+//     'Speeding more than 20 mph over',
+//     'Drug possession',
+//     'Minor in possession',
+//     'Open Container',
+//     'DUI/DWI',
+// ]
+
 const formData = {
     test: [
         {
@@ -393,7 +411,6 @@ const formData = {
             options: ['$50,000', '$100,000', '$150,000', '$200,000', '$250,000', '$300,000', '$350,000', '$400,000', '$450,000', '$500,000', '$550,000', '$600,000', '$650,000', '$700,000', '$750,000', '$800,000', '$850,000', '$900,000', '$950,000', '$1,000,000', '$1,250,000', '$1,500,000', '$1,7500,000', '$2,000,000'],
             type: 'radio',
         },
-
         whatIsYourName,
         addressV2,
         whatIsYourEmail,
@@ -402,7 +419,6 @@ const formData = {
 
     health: [
         {...whatIsYourDateOfBirth, show: true},
-
         {
             title: "What is Your Household Income?",
             value: '',
@@ -423,7 +439,6 @@ const formData = {
             ],
             type: 'radio',
         },
-
         whatIsYourName,
         addressV2,
         whatIsYourEmail,
@@ -454,9 +469,7 @@ const formData = {
             type: 'radio',
             show: true,
         },
-
         addressV2,
-
         {
             title: "Brief Description of Your Business",
             value: '',
@@ -511,7 +524,6 @@ const formData = {
             options: ['$1,000,000', '$2,000,000'],
             type: 'radio',
         },
-
         whatIsYourName,
         whatIsYourEmail,
         whatIsYourPhoneNumber,
@@ -540,30 +552,25 @@ const formData = {
             options: ['BR125', 'EJ8000', 'EL450', 'EN650', 'EN651', 'EN652', 'EN653', 'EN654', 'EN655', 'EN656', 'EN657'],
             type: 'radio',
         },
-
         areYouCurrentlyInsured,
         whatCompanyAreYouInsuredWith,
         howLongHaveYouBeenWithCompany,
-
         {
             title: 'Are You a Homeowner?',
             value: '',
             options: ['Yes', 'No'],
             type: 'radio',
         },
-
         whatIsYourDateOfBirth,
         whatIsYourGenderMin,
         areYouMarried,
         anyAtFaultAccidentsInTheLast3Years,
-
         {
             title: "DUI in the Last 3 years?",
             value: '',
             options: ['Yes', 'No'],
             type: 'radio',
         },
-
         whatIsYourName,
         addressV2,
         whatIsYourEmail,

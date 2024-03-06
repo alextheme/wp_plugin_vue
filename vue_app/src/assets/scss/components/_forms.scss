@@ -853,7 +853,7 @@ body {
   .form_pptu_descr {
     @extend %descr;
 
-    color: $blue;
+      color: $blue;
 
     p {
       &:not(:last-child) {
@@ -861,12 +861,10 @@ body {
       }
 
       a {
-        @extend %transition_opacity;
-
-        text-decoration: underline;
+        color: $lincks_blue;
 
         &:hover {
-          opacity: .6;
+          text-decoration: underline;
         }
       }
     }

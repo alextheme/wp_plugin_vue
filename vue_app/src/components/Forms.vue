@@ -145,7 +145,7 @@
                         <select-dropdown
                             :default="field.value"
                             :options="field.options"
-                            @input="validateSelect($event.value, i, field.type)"
+                            @input="validateSelect($event.value, i, field)"
                         />
                     </li>
 
@@ -203,7 +203,6 @@
                                 :options="field.options.radio"
                                 @input="validateRadioAndSelect($event.value, field, 'radio', i)"
                             />
-<!--                                @input="scrollController(field.type, i)"-->
                             <select-dropdown
                                 id="radio_and_select__select"
                                 name="select_make__select"
@@ -211,7 +210,6 @@
                                 :options="field.options.select"
                                 @input="validateRadioAndSelect($event.value, field, 'select', i)"
                             />
-<!--                                @input="field.value = $event.value; scrollController(field.type, i)"-->
                         </div>
                     </li>
 
@@ -499,7 +497,10 @@
                 </template>
 
                 <li :class="['button_next_tab', { done: !isTabs }]" ref="btnNextTab_1" v-show="tab.active === 0 && tab.complete[0]">
-                    <button type="button" @click="goTab(1, true)">Next Step</button>
+                    <button type="button" @click="goTab(1, true)">
+                        <span v-if="isTabs">Next Step</span>
+                        <span v-if="!isTabs">Send Request</span>
+                    </button>
                 </li>
 
                 <li :class="['button_next_tab']" ref="btnNextTab_2" v-show="isTabs && tab.active === 1 && tab.complete[0] && tab.complete[1]">
@@ -507,7 +508,7 @@
                 </li>
 
                 <li :class="['button_next_tab', { done: isTabs }]" ref="btnNextTab_3" v-show="isTabs && tab.active === 2 && tab.complete[0] && tab.complete[1] && tab.complete[2]">
-                    <button type="button" @click="goTab(3, true)">Next Step</button>
+                    <button type="button" @click="goTab(3, true)">Get my good quotes</button>
                 </li>
 
                 <privacy-policy :show-no-spam-info="!isTabs" v-if="showPrivacyPolicy" />
@@ -551,6 +552,7 @@ export default {
             isValidDate: {mm: false, dd: false, yyyy: false},
             userNameObj: '',
             auto_make: '',
+            company_name: '',
         }
     },
     computed: {
@@ -626,6 +628,10 @@ export default {
         replaceTitle(title) {
             if (title.includes('%%auto_make%%')) {
                 return title.replace('%%auto_make%%', this.autoMake)
+            }
+
+            if (title.includes('%%company_name%%')) {
+                return title.replace('%%company_name%%', this.company_name)
             }
 
             return title
@@ -711,11 +717,15 @@ export default {
                 this.auto_make = value
             }
         },
-        validateSelect(value, i, fieldType) {
+        validateSelect(value, i, field) {
             this.questions[i].value = value
             this.questions[i].complete = !!value
 
-            this.scrollController(fieldType, i)
+            if (field.key === 'select_company') {
+                this.company_name = value
+            }
+
+            this.scrollController(field.type, i)
         },
         validateRadioAndSelect(value, field, type, i) {
 

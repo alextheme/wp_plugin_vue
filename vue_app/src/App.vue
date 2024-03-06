@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import Forms from "./components/Forms.vue"
-import questions from "./assets/data/questions.js"
-// import questions from "./assets/data/questions_value.js"
+import Forms from './components/Forms.vue'
+import questions from './assets/data/questions.js'
+// import questions from './assets/data/questions_value.js'
 // window.formId = 'test'
 
 export default {
