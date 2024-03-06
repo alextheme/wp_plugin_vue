@@ -42,8 +42,8 @@ export default  {
                 : this.options && this.options.length > 0
                     ? this.options[0]
                     : null,
-            open: false,
-        };
+            open: false
+        }
     },
     mounted() {
         this.$emit("input", { value: this.options && this.selected === this.options[0] ? '' : this.selected, complete: this.options && this.selected !== this.options[0]} )

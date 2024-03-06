@@ -9,7 +9,6 @@ export const address =  {
     },
     options: ['State...', 'AB', 'BC', 'CD', 'AA', 'FD', 'RP'],
     type: 'address',
-    formKitvalid: false,
 }
 
 export const addressV2   =  {
@@ -23,7 +22,6 @@ export const addressV2   =  {
     },
     options: ['State...', 'AB', 'BC', 'CD', 'AA', 'FD', 'RP'],
     type: 'address_v2',
-    formKitvalid: false,
 }
 
 export const whatIsYourDateOfBirth = {

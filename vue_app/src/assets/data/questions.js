@@ -4,7 +4,15 @@ import {
     whatIsYourCreditScore, whatIsYourDateOfBirth, whatIsYourEducationLevel,
     whatIsYourEmail, whatIsYourGender, whatIsYourGenderMin, whatIsYourGenderOptional,
     whatIsYourName, whatIsYourOccupation, whatIsYourPhoneNumber, whatTypeOfHomeDoYouLiveIn
-} from "./questions-export.js";
+} from './questions-export.js'
+
+import motorcycle from './moto.js'
+
+// Select ‘Not Sure’ if you don’t know what coverage you want.
+// Your Information is safe & secure
+// Insurance companies require this in order to provide an accurate quote.
+// No Spam Guaranteed
+// Your life insurance quotes are ready
 
 const formData = {
     test: [
@@ -88,7 +96,6 @@ const formData = {
             },
             options: ['State...', 'AB', 'BC', 'CD', 'AA', 'FD', 'RP'],
             type: 'address',
-            formKitvalid: false,
         },
         {
             title: "TEST... Address2",
@@ -101,7 +108,6 @@ const formData = {
             },
             options: ['State...', 'AB', 'BC', 'CD', 'AA', 'FD', 'RP'],
             type: 'address_v2',
-            formKitvalid: false,
         },
         {
             title: 'TEST... Number',
@@ -154,7 +160,6 @@ const formData = {
             options: {
                 years: ['Select Vehicle Year', ...Array.from({ length: (2024 - 1990) + 1 }, (_, i) => '' + (1990 + i)).reverse()],
                 makes: ["Select Make"],
-                // make: ["Select Make", "Acura", "Audi", "BMW", "Buick", "Cadillac", "Chevrolet", "Genesis", "GMC", "Honda", "Hyundai", "INFINITI", "Jaguar", "Kia", "Land Rover", "Lincoln", "Mazda", "MINI", "Mitsubishi", "Nissan", "Polestar", "Subaru", "Toyota", "Volvo", "Alfa Romeo", "Bentley", "Chrysler", "Dodge", "FIAT", "Ford", "Jeep", "Karma", "Lamborghini", "Lexus", "Lucid", "Maserati", "McLaren", "Mercedes-Benz", "Porsche", "Ram", "Rivian", "Rolls-Royce", "Tesla", "Volkswagen", "Aston Martin", "Lotus", "Ferrari", "smart", "Scion", "Suzuki", "Fisker", "Maybach", "Saab", "Mercury", "HUMMER", "Pontiac", "Bugatti", "Saturn", "Spyker", "Isuzu", "Panoz", "Oldsmobile", "Daewoo", "Plymouth", "AM General", "Eagle", "Geo", "VinFast" ],
                 models: ['Select Model', 'QASHQAI Hybrid', 'BMW 5', 'X-TRAIL Hybrid', 'QASHQAI', 'JUKE', 'LEAF'],
             },
             load: {
@@ -216,7 +221,7 @@ const formData = {
             type: 'radio',
         },
         whatIsYourName,
-        // whatIsYourDateOfBirth,
+        whatIsYourDateOfBirth,
         whatIsYourGender,
         areYouMarried,
         whatIsYourEducationLevel,
@@ -241,6 +246,17 @@ const formData = {
             value: '',
             options: ['Yes', 'No'],
             type: 'radio',
+
+            // Type of Ticket
+            // type_of_ticket: [
+            //     'Speeding less than 10 mph over',
+            //     'Speeding more than 10 mph over',
+            //     'Speeding more than 20 mph over',
+            //     'Drug possession',
+            //     'Minor in possession',
+            //     'Open Container',
+            //     'DUI/DWI',
+            // ]
         },
         {
             title: "Want to add a second driver?",
@@ -526,10 +542,7 @@ const formData = {
         {
             title: 'Select Motorcycle Make',
             value: '',
-            options: {
-                radio: ['Harley-Davidson', 'Honda', 'Yamaha', 'Kawasaki', 'Suzuki', 'BMW', 'Ducati', 'Triumph Motorcycle', '__for_select__'],
-                select: ['Select Other Make', 'Make1', 'Make2', 'Make3', 'Make4']
-            },
+            options: ['Harley-Davidson', 'Honda', 'Yamaha', 'Kawasaki', 'Suzuki', 'BMW', 'Ducati', 'Triumph Motorcycle', '__for_select__', ...motorcycle],
             type: 'radio_select',
         },
         {

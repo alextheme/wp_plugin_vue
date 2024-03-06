@@ -73,12 +73,12 @@
 }
 
 .custom-select .items .item {
-  color: $blue;
   height: 4.5rem;
   line-height: 4.5rem;
   padding: 0 1.6rem;
   cursor: pointer;
   user-select: none;
+  white-space: nowrap;
 }
 
 .custom-select .items .item:not(.selected_value):hover {

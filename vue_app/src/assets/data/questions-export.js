@@ -7,23 +7,25 @@ export const address =  {
         state: '',
         zip: ''
     },
-    options: ['State...', 'AB', 'BC', 'CD', 'AA', 'FD', 'RP'],
     type: 'address',
-    formKitvalid: false,
+
+    options: [
+        'State...',
+
+        'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
+        'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
+        'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+        'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
+        'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
+
+        'DC', 'AS', 'GU', 'MP', 'PR', 'VI'
+    ]
 }
 
-export const addressV2   =  {
-    title: "What is your address?",
-    value: {
-        address: '',
-        unit: '',
-        city: '',
-        state: '',
-        zip: ''
-    },
-    options: ['State...', 'AB', 'BC', 'CD', 'AA', 'FD', 'RP'],
-    type: 'address_v2',
-    formKitvalid: false,
+export const addressV2 = {
+    ...address,
+    city: '',
+    type: 'address_v2'
 }
 
 export const whatIsYourDateOfBirth = {
@@ -159,8 +161,29 @@ export const areYouCurrentlyInsured = {
 export const whatCompanyAreYouInsuredWith = {
     title: "What company are you insured with?",
     value: '',
-    options: ['Select Company', 'Company 1', 'Company 2', 'Company 3'],
+    options: [
+        'Select Company',
+        '21st Century Insurance',
+        'AAA Insurance Co.',
+        'Allstate',
+        'American Family',
+        'AMICA',
+        'Country Financial',
+        'Esurance',
+        'Farmers',
+        'Geico',
+        'Liberty Mutual',
+        'Mercury',
+        'Nationwide',
+        'Progressive',
+        'State Farm',
+        'The Hartford',
+        'Travelers',
+        'USAA',
+        'Other'
+    ],
     type: 'select',
+    type2: 'company_name',
 }
 
 export const howLongHaveYouBeenWithCompany = {

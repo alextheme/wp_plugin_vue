@@ -10,7 +10,8 @@
 import Forms from "./components/Forms.vue"
 import questions from "./assets/data/questions.js"
 // import questions from "./assets/data/questions_value.js"
-// window.formId = 'test'
+
+// window.formId = 'auto'
 
 export default {
     components: { Forms },

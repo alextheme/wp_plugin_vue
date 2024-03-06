@@ -156,6 +156,8 @@
                             <li v-for="item in field.descrList" class="radio__descr_item"><span>{{ item }}</span></li>
                         </ul>
 
+<!--                        <radio-buttons :field="field" :id="i"></radio-buttons>-->
+
                         <FormKit
                             v-model="field.value"
                             type="radio"
@@ -200,15 +202,15 @@
                                 name="select_make__radio"
                                 v-model="field.value"
                                 type="radio"
-                                :options="field.options.radio"
-                                @input="scrollController(field.type, i)"
+                                :options="field.options.slice(0, 9)"
+                                @input="validateRadioAndSelect($event.value, field, 'radio', i)"
                             />
                             <select-dropdown
-                                id="radio_and_select__select"
+                                id="selectFieldMotorcycleMake"
                                 name="select_make__select"
                                 :default="field.value"
-                                :options="field.options.select"
-                                @input="field.value = $event.value; scrollController(field.type, i)"
+                                :options="['Select Other Make', ...field.options.slice(9, field.options.length)]"
+                                @input="validateRadioAndSelect($event.value, field, 'select', i)"
                             />
                         </div>
                     </li>
@@ -529,12 +531,13 @@ import moment from 'moment'
 import QuestionHeader from './parts/QuestionHeader.vue'
 import Done from './parts/Done.vue'
 import PrivacyPolicy from './parts/PrivacyPolicy.vue'
-import SelectDropdown from "./parts/SelectDropdown.vue";
-import IconOk from "./parts/IconOk.vue";
+import SelectDropdown from './parts/SelectDropdown.vue'
+import IconOk from './parts/IconOk.vue'
+import RadioButtons from './parts/Radio.vue'
 import axios from "axios"
 
 export default {
-    components: { Done, PrivacyPolicy, SelectDropdown, QuestionHeader, IconOk },
+    components: { Done, PrivacyPolicy, SelectDropdown, QuestionHeader, IconOk, RadioButtons },
     props: {
         form: { type: String, required: true },
         qs: { type: Object, required: true },
@@ -549,6 +552,7 @@ export default {
             isValidDate: {mm: false, dd: false, yyyy: false},
             userNameObj: '',
             auto_make: '',
+            companyName: '',
         }
     },
     computed: {
@@ -586,6 +590,7 @@ export default {
             const inxSelectAuto = Number.parseInt(this.questions.findIndex(q => q.type === 'select_auto'))
             const inxAddress = Number.parseInt(this.questions.findIndex(q => q.type === 'address'))
                 || Number.parseInt(this.questions.findIndex(q => q.type === 'address_v2'))
+            const inxCompanyName = Number.parseInt(this.questions.findIndex(q => q.type2 === 'company_name'))
 
             return {
                 email: isNaN(inxEmail) ? -1 : inxEmail,
@@ -593,6 +598,7 @@ export default {
                 userName: isNaN(inxUserName) ? -1 : inxUserName,
                 address: isNaN(inxAddress) ? -1 : inxAddress,
                 selectAuto: isNaN(inxSelectAuto) ? -1 : inxSelectAuto,
+                companyName: isNaN(inxCompanyName) ? -1 : inxCompanyName,
             }
         },
         isTabs() {
@@ -637,63 +643,51 @@ export default {
                 self.scrollController(fieldType, id)
             }
 
-            if (fieldType === 'select_auto__model') {
-                return
-            }
 
             if (fieldType === 'select_auto__year') {
 
-                self.questions[0].load.makes = true
-                self.questions[0].value.auto_make = ''
-                self.questions[0].value.auto_model = ''
+                const elem = document.querySelector('.q_item--select_auto')
+                if (elem) this.scrollToSmoothly(this.getCoords(elem).top - 80)
 
-                axios.get("https://car-api2.p.rapidapi.com/api/makes", {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-RapidAPI-Key': '1f6b885bedmshda406e131f6f802p18a97cjsn71cf71c2568c',
-                        'X-RapidAPI-Host': 'car-api2.p.rapidapi.com'
-                    },
-                    params: {
-                        direction: 'asc',
-                        sort: 'id'
-                    }
-                })
-                    .then(function (response) {
-                        self.questions[0].options.makes = [self.questions[0].options.makes[0], ...response.data.data.map(obj => obj.name)]
-                    })
-                    .catch(function (error) {
-                        console.log(error.message)
-                    })
-                    .finally(function () {
-                        self.questions[0].load.makes = false
-                    })
+                const year = self.questions[0].value.auto_year
+
+                if (!!year) {
+                    self.questions[0].load.makes = true
+                    self.questions[0].value.auto_make = ''
+                    self.questions[0].value.auto_model = ''
+
+                    axios.get('https://www.fueleconomy.gov/ws/rest/vehicle/menu/make?year=' + year)
+                        .then(function (data) {
+                            const response = data.request.response
+                            const obj = JSON.parse(response)
+                            const arr = obj.menuItem.map(elem => elem.value)
+                            self.questions[0].options.makes = [self.questions[0].options.makes[0], ...arr]
+                        })
+                        .catch(function (error) {
+                            console.log(error.message)
+                        })
+                        .finally(function () {
+                            self.questions[0].load.makes = false
+                        })
+                }
             }
 
-            if (fieldType === 'select_auto__makes') {
+            if (fieldType === 'select_auto__makes' && !!self.questions[0].value.auto_make) {
 
                 self.questions[0].load.models = true
 
-                const host = 'mc-api.marketcheck.com'
-                const api_key = 'bb2c8c2c-b483-44d9-a955-f7568a3b1091'
+                const host = 'www.fueleconomy.gov'
                 const make = self.questions[0].value.auto_make
                 const year = self.questions[0].value.auto_year
-                const url1 = 'https://' + host + '/v2/search/car/active?api_key=' + api_key + '&year=' + year + '&make=' + make + '&include_relevant_links=true'
-                const url = 'https://' + host + '/v2/search/car/active'
+                const url = 'https://' + host + '/ws/rest/vehicle/menu/model?year=' + year + '&make=' + make
 
-                axios.get(url, {
-                    headers: {},
-                    params: {
-                        api_key,
-                        year,
-                        make,
-                        include_relevant_links: !true,
-                    }
-                })
-                    .then(function (response) {
-                        self.questions[0].options.models = [
-                            self.questions[0].options.models[0],
-                            ...response.data.listings.map(obj => obj.build.model)
-                        ]
+                axios.get(url)
+                    .then(function (data) {
+                        const response = data.request.response
+                        const obj = JSON.parse(response)
+                        const arr = obj.menuItem.map(elem => elem.value)
+
+                        self.questions[0].options.models = [ self.questions[0].options.models[0], ...arr ]
                     })
                     .catch(function (error) {
                         console.log(error.message)
@@ -702,6 +696,10 @@ export default {
                         self.questions[0].load.models = false
                     })
             }
+
+            // if (fieldType === 'select_auto__model') {
+            //     return
+            // }
         },
 
         /** Validate Field */
@@ -722,6 +720,25 @@ export default {
             this.questions[i].complete = !!value
 
             this.scrollController(fieldType, i)
+        },
+        validateRadioAndSelect(value, field, type, i) {
+
+            if (type === 'radio') {
+                const s = document.getElementById('selectFieldMotorcycleMake')
+                const o = s.querySelector('.item')
+
+                if (s && o) {
+                    const selected = s.querySelector('.selected')
+                    selected.innerHTML = o.innerHTML
+                    s.querySelectorAll('.item').forEach(elem => elem.classList.remove('selected_value'))
+                }
+            }
+
+            if (type === 'select') {
+                field.value = value
+            }
+
+            this.scrollController(field.type, i)
         },
         validateDate(node, id) {
             if (node === 'user_birth') {
@@ -971,7 +988,7 @@ export default {
         },
         moveElement() {
             const target = document.querySelector('#radio_and_select__radio .formkit-option:last-child .formkit-wrapper')
-            const select = document.querySelector('#radio_and_select__select')
+            const select = document.querySelector('#selectFieldMotorcycleMake')
 
             if (! target) return
 
@@ -997,7 +1014,7 @@ export default {
 
             return { top: Math.round(top), left: Math.round(left), height: box.height }
         },
-        /*
+        /**
            @param pos: the y-position to scroll to (in pixels)
            @param time: the exact amount of time the scrolling will take (in milliseconds)
         */
@@ -1107,15 +1124,10 @@ export default {
         this.setStatusCompleteQuestions()
         this.managerTabs()
         this.moveElement()
-        window.scrollTo(0, 0)
-        // document.addEventListener('scroll', () => {
-        //     // // на скільки сторінка прокручена вгору
-        //     //this.scrollTop = window.pageYOffset || document.documentElement.scrollTop
-        //     // // відстань від верху вікна перегляду до верху елемента
-        //     // elem.getBoundingClientRect().top
-        //     // // прокрутити сторінку щоб елемент був на певній відстані ($offsetTop) від верху вікна перегляду
-        //     // window.scrollTop = scrollTop + elem.getBoundingClientRect().top - $offsetTop
-        // })
+
+        const header = document.querySelector('.elementor-location-header')
+        const headerHeight = header.getBoundingClientRect().height
+        this.scrollToSmoothly(headerHeight)
     },
     watch: {
         questions: {
