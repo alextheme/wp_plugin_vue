@@ -201,15 +201,17 @@
                                 v-model="field.value"
                                 type="radio"
                                 :options="field.options.radio"
-                                @input="scrollController(field.type, i)"
+                                @input="validateRadioAndSelect($event.value, field, 'radio', i)"
                             />
+<!--                                @input="scrollController(field.type, i)"-->
                             <select-dropdown
                                 id="radio_and_select__select"
                                 name="select_make__select"
                                 :default="field.value"
                                 :options="field.options.select"
-                                @input="field.value = $event.value; scrollController(field.type, i)"
+                                @input="validateRadioAndSelect($event.value, field, 'select', i)"
                             />
+<!--                                @input="field.value = $event.value; scrollController(field.type, i)"-->
                         </div>
                     </li>
 
@@ -722,6 +724,25 @@ export default {
             this.questions[i].complete = !!value
 
             this.scrollController(fieldType, i)
+        },
+        validateRadioAndSelect(value, field, type, i) {
+
+            if (type === 'radio') {
+                const s = document.getElementById('radio_and_select__select')
+                const o = s.querySelector('.item')
+
+                if (s && o) {
+                    const selected = s.querySelector('.selected')
+                    selected.innerHTML = o.innerHTML
+                    s.querySelectorAll('.item').forEach(elem => elem.classList.remove('selected_value'))
+                }
+            }
+
+            if (type === 'select') {
+                field.value = value
+            }
+
+            this.scrollController(field.type, i)
         },
         validateDate(node, id) {
             if (node === 'user_birth') {

@@ -6,6 +6,8 @@ import {
     whatIsYourName, whatIsYourOccupation, whatIsYourPhoneNumber, whatTypeOfHomeDoYouLiveIn
 } from "./questions-export.js";
 
+import motorcycle from './moto.js'
+
 const formData = {
     test: [
         {
@@ -528,7 +530,7 @@ const formData = {
             value: '',
             options: {
                 radio: ['Harley-Davidson', 'Honda', 'Yamaha', 'Kawasaki', 'Suzuki', 'BMW', 'Ducati', 'Triumph Motorcycle', '__for_select__'],
-                select: ['Select Other Make', 'Make1', 'Make2', 'Make3', 'Make4']
+                select: ['Select Other Make', ...motorcycle]
             },
             type: 'radio_select',
         },
