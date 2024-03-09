@@ -18,8 +18,10 @@ if( ! defined( 'ABSPATH' ) ) exit(); // No direct access allowed
 require_once 'vendor/autoload.php';
 
 require_once 'inc/Shortcode.php';
+require_once 'inc/Admin.php';
 
 use SFI\Inc\Shortcode;
+use SFI\Inc\Admin;
 
 final class Shppb_Forms_Insurance {
     const VERSION = '1.0.2';
@@ -58,6 +60,7 @@ final class Shppb_Forms_Insurance {
     public function init_plugin() {
         // init
         new Shortcode();
+        new Admin();
     }
 }
 

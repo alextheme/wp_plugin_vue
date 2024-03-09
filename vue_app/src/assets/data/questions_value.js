@@ -2,57 +2,55 @@ import questions from './questions.js'
 
 const q = {...questions}
 
-const setValueAuto = () => {
+const auto = () => {
     q.auto[0].value.auto_year = 1999
     q.auto[0].value.auto_make = 'Audi'
     q.auto[0].value.auto_model = 'A3'
 
     q.auto[1].value = 'Pleasure'
-
-    q.auto[2].value.mm = 5
-    q.auto[2].value.dd = 25
-    q.auto[2].value.yyyy = 2000
-
-    q.auto[3].value = 20
-    q.auto[4].value = 'Finance'
-    q.auto[5].value = 'Full Coverage'
+    q.auto[2].value = 20
+    q.auto[3].value = 'Finance'
+    q.auto[4].value = 'Full Coverage'
+    q.auto[5].value = '$1000'
     q.auto[6].value = '$1000'
-    q.auto[7].value = '$1000'
-    q.auto[8].value = 'No'
+    q.auto[7].value = 'No'
 
-    q.auto[9].value.full_name = 'Oleksandr'
-    q.auto[9].value.last_name = 'Borymskyi'
+    // q.auto[8].value.full_name = 'Oleksandr'
+    // q.auto[8].value.last_name = 'Borymskyi'
 
-    q.auto[10].value = 'Male'
-    q.auto[11].value = 'Yes'
-    q.auto[12].value = 'Some College'
+    // q.auto[9].value.mm = 5
+    // q.auto[9].value.dd = 25
+    // q.auto[9].value.yyyy = 2000
 
-    q.auto[13].value = 'Architect'
-    q.auto[14].value = 'Good (600-700)'
-    q.auto[15].value = 'Permit'
-    q.auto[16].value = 'No'
-    q.auto[17].value = 'No'
-    q.auto[18].value = 'Yes'
+    // q.auto[10].value = 'Male'
+    // q.auto[11].value = 'Yes'
+    // q.auto[12].value = 'Some College'
+    //
+    // q.auto[13].value = 'Architect'
+    // q.auto[14].value = 'Good (600-700)'
+    // q.auto[15].value = 'Permit'
+    // q.auto[16].value = 'No'
+    // q.auto[17].value = 'No'
+    // q.auto[18].value = 'Yes'
 
-
-    q.auto[19].value = 'Yes'
-    q.auto[20].value = 'Basic'
-    q.auto[21].value = 'No'
-    q.auto[22].value = 'Own'
-    q.auto[23].value = 'Townhome'
-
-    q.auto[24].value.address = 'Shevchenko, 45, Berdychiv'
-    q.auto[24].value.unit = '1234'
-    q.auto[24].value.apt = 'apt ... '
-    q.auto[24].value.state = 'MN'
-    q.auto[24].value.zip = '4321'
+    // q.auto[19].value = 'Yes'
+    // q.auto[20].value = 'Basic'
+    // q.auto[21].value = 'No'
+    // q.auto[22].value = 'Own'
+    // q.auto[23].value = 'Townhome'
+    //
+    // q.auto[24].value.address = 'Shevchenko, 45, Berdychiv'
+    // q.auto[24].value.unit = '1234'
+    // q.auto[24].value.apt = 'apt auto ... '
+    // q.auto[24].value.state = 'MN'
+    // q.auto[24].value.zip = '4321'
 }
-const setValueHome = () => {
+const home = () => {
     q.home[0].value = 'Townhome'
 
     q.home[1].value.address = 'Shevchenko, 45, Berdychiv'
     q.home[1].value.unit = '1234'
-    q.home[1].value.apt = 'apt ... '
+    q.home[1].value.apt = 'apt home ... '
     q.home[1].value.state = 'MN'
     q.home[1].value.zip = '4321'
 
@@ -81,7 +79,7 @@ const setValueHome = () => {
     q.home[18].value = '4-6 Month'
     q.home[19].value = 'Что то уту'
 }
-const setValueLife = () => {
+const life = () => {
     q.life[0].value.dd = 18
     q.life[0].value.mm = 3
     q.life[0].value.yyyy = 2001
@@ -105,7 +103,6 @@ const setValueLife = () => {
 
     q.life[10].value.address = 'Shevchenko, 231'
     q.life[10].value.unit = '111'
-    q.life[10].value.apt = 'apt life ... '
     q.life[10].value.city = 'Berdychiv'
     q.life[10].value.state = 'OH'
     q.life[10].value.zip = '222'
@@ -113,7 +110,7 @@ const setValueLife = () => {
     q.life[11].value = 'favorstreet21@gmail.com'
     q.life[12].value = '123456789'
 }
-const setValueHealth = () => {
+const health = () => {
     q.health[0].value.dd = 18
     q.health[0].value.mm = 3
     q.health[0].value.yyyy = 2001
@@ -126,7 +123,6 @@ const setValueHealth = () => {
 
     q.health[4].value.address = 'Shevchenko, 111'
     q.health[4].value.unit = '1234567890'
-    q.health[4].value.apt = 'apt health ... '
     q.health[4].value.city = 'Berdychiv 2'
     q.health[4].value.state = 'CA'
     q.health[4].value.zip = '7777'
@@ -134,7 +130,7 @@ const setValueHealth = () => {
     q.health[5].value = 'favorstreet21@gmail.com'
     q.health[6].value = '123456789'
 }
-const setValueMedicare = () => {
+const medicare = () => {
     q.medicare[0].value.dd = 22
     q.medicare[0].value.mm = 2
     q.medicare[0].value.yyyy = 2005
@@ -146,7 +142,6 @@ const setValueMedicare = () => {
 
     q.medicare[3].value.address = 'Shevchenko, 222'
     q.medicare[3].value.unit = '224455'
-    q.medicare[3].value.apt = 'apt medicare ... '
     q.medicare[3].value.city = 'Berdychiv 3'
     q.medicare[3].value.state = 'AZ'
     q.medicare[3].value.zip = '65433'
@@ -154,13 +149,12 @@ const setValueMedicare = () => {
     q.medicare[4].value = 'favorstreet21@gmail.com'
     q.medicare[5].value = '123456789'
 }
-const setValueCommercial = () => {
+const commercial = () => {
     q.commercial[0].value = 'Name Business'
     q.commercial[1].value = 'LLC'
 
     q.commercial[2].value.address = 'Shevchenko, 333'
     q.commercial[2].value.unit = '333'
-    q.commercial[2].value.apt = 'apt commercial ... '
     q.commercial[2].value.city = 'Berdychiv 333'
     q.commercial[2].value.state = 'AZ'
     q.commercial[2].value.zip = '333'
@@ -181,7 +175,7 @@ const setValueCommercial = () => {
     q.commercial[13].value = 'favorstreet21@gmail.com'
     q.commercial[14].value = '123456789'
 }
-const setValueBike = () => {
+const bike = () => {
     q.bike[0].value = 2000
     q.bike[1].value = 'Kawasaki'
     q.bike[2].value = 'EN650'
@@ -204,7 +198,7 @@ const setValueBike = () => {
 
     q.bike[13].value.address = 'Shevchenko, 55'
     q.bike[13].value.unit = '5555'
-    q.bike[13].value.apt = 'apt commercial ... '
+    q.bike[13].value.apt = 'apt bike ...'
     q.bike[13].value.city = 'Berdychiv 5'
     q.bike[13].value.state = 'AZ'
     q.bike[13].value.zip = '55555'
@@ -212,7 +206,7 @@ const setValueBike = () => {
     q.bike[14].value = '!favorstreet21@gmail.com'
     q.bike[15].value = '22334400'
 }
-const setValueRenters = () => {
+const renters = () => {
     q.renters[0].value = 'Duplex'
     q.renters[1].value = 'Yes'
     q.renters[2].value = 'AMICA'
@@ -231,7 +225,6 @@ const setValueRenters = () => {
 
     q.renters[9].value.address = 'Shevchenko, 1dfr'
     q.renters[9].value.unit = '13579'
-    q.renters[9].value.apt = 'apt commercial ... '
     q.renters[9].value.city = 'Berdychiv &&&'
     q.renters[9].value.state = 'AZ'
     q.renters[9].value.zip = '4321'
@@ -241,13 +234,13 @@ const setValueRenters = () => {
 }
 
 
-setValueAuto()
-setValueHome()
-setValueLife()
-setValueHealth()
-setValueMedicare()
-setValueCommercial()
-setValueBike()
-setValueRenters()
+auto()
+// home()
+// life()
+// health()
+// medicare()
+// commercial()
+// bike()
+// renters()
 
 export default q

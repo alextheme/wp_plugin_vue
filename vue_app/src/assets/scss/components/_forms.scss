@@ -1,7 +1,19 @@
 :root {
   --form_header_height: 6.5rem;
   --done-padding: 40rem;
+  //text-transform: capitalize;
 }
+
+/* input autofill */
+:-webkit-autofill {
+  animation-name: onAutoFillStart;
+}
+:not(:-webkit-autofill) {
+  animation-name: onAutoFillCancel;
+}
+@keyframes onAutoFillStart { from {} to {} }
+@keyframes onAutoFillCancel { from {} to {} }
+/* input autofill */
 
 body {
   overflow-x: hidden;

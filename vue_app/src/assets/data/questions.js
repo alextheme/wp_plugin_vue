@@ -7,6 +7,7 @@ import {
 } from "./questions-export.js";
 
 import motorcycle from './moto.js'
+import { motorcycleCheckbox, motorcycleDatabase } from './moto.js'
 
 // TODO: Required option Appears during the required question
 // Select ‘Not Sure’ if you don’t know what coverage you want.
@@ -164,6 +165,7 @@ const formData = {
     ],
 
     auto: [
+        // tab 1
         {
             title: "Let's get started, what car do you drive?",
             value: {
@@ -174,7 +176,6 @@ const formData = {
             options: {
                 years: ['Select Vehicle Year', ...Array.from({ length: (2024 - 1990) + 1 }, (_, i) => '' + (1990 + i)).reverse()],
                 makes: ["Select Make"],
-                // make: ["Select Make", "Acura", "Audi", "BMW", "Buick", "Cadillac", "Chevrolet", "Genesis", "GMC", "Honda", "Hyundai", "INFINITI", "Jaguar", "Kia", "Land Rover", "Lincoln", "Mazda", "MINI", "Mitsubishi", "Nissan", "Polestar", "Subaru", "Toyota", "Volvo", "Alfa Romeo", "Bentley", "Chrysler", "Dodge", "FIAT", "Ford", "Jeep", "Karma", "Lamborghini", "Lexus", "Lucid", "Maserati", "McLaren", "Mercedes-Benz", "Porsche", "Ram", "Rivian", "Rolls-Royce", "Tesla", "Volkswagen", "Aston Martin", "Lotus", "Ferrari", "smart", "Scion", "Suzuki", "Fisker", "Maybach", "Saab", "Mercury", "HUMMER", "Pontiac", "Bugatti", "Saturn", "Spyker", "Isuzu", "Panoz", "Oldsmobile", "Daewoo", "Plymouth", "AM General", "Eagle", "Geo", "VinFast" ],
                 models: ['Select Model', 'QASHQAI Hybrid', 'BMW 5', 'X-TRAIL Hybrid', 'QASHQAI', 'JUKE', 'LEAF'],
             },
             load: {
@@ -185,6 +186,7 @@ const formData = {
             show: true,
             complete: false,
             type: 'select_auto',
+            key: 'select_auto',
         },
         {
             title: 'What do you use your %%auto_make%% for?',
@@ -192,7 +194,6 @@ const formData = {
             options: ['Getting to Work', 'Running Errands', 'Pleasure', 'Uber / Lyft'],
             type: 'radio',
         },
-        whatIsYourDateOfBirth,
         {
             title: 'How many miles per day do you drive?',
             descr: 'Most drivers average 30 per day',
@@ -201,7 +202,7 @@ const formData = {
             type: 'radio',
         },
         {
-            title: 'Do you own your %%auto_make%% GT-R?',
+            title: 'Do you own your %%auto_make%%?',
             descr: 'Drivers who lease or finance may need more coverage',
             value: '',
             options: ['Own', 'Lease', 'Finance'],
@@ -234,9 +235,69 @@ const formData = {
             value: '',
             options: ['Yes', 'No'],
             type: 'radio',
+            key: 'add_second_vehicle',
         },
-        whatIsYourName,
-        // whatIsYourDateOfBirth,
+
+        /** Second Vehicle */
+        {
+            title: "Second Vehicle: What car do you drive?",
+            value: {
+                auto_year: '',
+                auto_make: '',
+                auto_model: '',
+            },
+            options: {
+                years: ['Select Vehicle Year', ...Array.from({ length: (2024 - 1990) + 1 }, (_, i) => '' + (1990 + i)).reverse()],
+                makes: ["Select Make"],
+                models: ['Select Model'],
+            },
+            load: {
+                years: false,
+                makes: false,
+                models: false,
+            },
+            complete: false,
+            type: 'select_auto',
+            key: 'select_auto2',
+            group: 'vehicle2',
+        },
+        {
+            title: 'Second Vehicle: What do you use your %%second_auto_make%% for?',
+            value: '',
+            options: ['Getting to Work', 'Running Errands', 'Pleasure', 'Uber / Lyft'],
+            type: 'radio',
+            group: 'vehicle2',
+        },
+        {
+            title: 'Second Vehicle: How many miles per day do you drive?',
+            descr: 'Most drivers average 30 per day',
+            value: '',
+            options: ['5', '10', '20', '30+'],
+            type: 'radio',
+            group: 'vehicle2',
+        },
+        {
+            title: 'Second Vehicle: Do you own your %%second_auto_make%%?',
+            descr: 'Drivers who lease or finance may need more coverage',
+            value: '',
+            options: ['Own', 'Lease', 'Finance'],
+            type: 'radio',
+            group: 'vehicle2',
+        },
+        {
+            title: 'Second Vehicle: Would You Like Full Coverage or Liability Only?',
+            descr: 'Liability covers damage you cause other drivers or their property.\nFull coverage applies to damage to your vehicle.',
+            value: '',
+            options: ['Full Coverage', 'Liability Only'],
+            type: 'radio',
+            group: 'vehicle2',
+        },
+        // Second Vehicle
+
+
+        // tab 2
+        {...whatIsYourName, show: true},
+        whatIsYourDateOfBirth,
         whatIsYourGender,
         areYouMarried,
         whatIsYourEducationLevel,
@@ -269,6 +330,9 @@ const formData = {
             options: ['Yes', 'No'],
             type: 'radio',
         },
+
+
+        // tab 3
         {
             title: "Do you currently have car insurance?",
             value: '',
@@ -541,16 +605,23 @@ const formData = {
             title: 'Select Motorcycle Make',
             value: '',
             options: {
-                radio: ['Harley-Davidson', 'Honda', 'Yamaha', 'Kawasaki', 'Suzuki', 'BMW', 'Ducati', 'Triumph Motorcycle', '__for_select__'],
-                select: ['Select Other Make', ...motorcycle]
+                radio: [...motorcycleCheckbox, '__for_select__'],
+                select: [
+                    'Select Other Make',
+                    ...motorcycleDatabase
+                        .map(moto => moto.make[0].toUpperCase() + moto.make.toLowerCase().slice(1))
+                        .filter(make => !motorcycleCheckbox.map(e => e.toLowerCase()).includes(make.toLowerCase()))
+                ]
             },
             type: 'radio_select',
+            key: 'select_motorcycle_make'
         },
         {
             title: 'Select Motorcycle Model',
             value: '',
             options: ['BR125', 'EJ8000', 'EL450', 'EN650', 'EN651', 'EN652', 'EN653', 'EN654', 'EN655', 'EN656', 'EN657'],
             type: 'radio',
+            key: 'select_motorcycle_models'
         },
         areYouCurrentlyInsured,
         whatCompanyAreYouInsuredWith,
