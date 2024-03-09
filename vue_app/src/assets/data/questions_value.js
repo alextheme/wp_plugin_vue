@@ -51,7 +51,7 @@ const auto = () => {
 
     q.auto[29].value.address = 'Shevchenko, 45, Berdychiv'
     q.auto[29].value.unit = '1234'
-    q.auto[29].value.apt = 'apt auto ... '
+    q.auto[29].value.apt = ''
     q.auto[29].value.state = 'MN'
     q.auto[29].value.zip = '4321'
 }
@@ -60,7 +60,7 @@ const home = () => {
 
     q.home[1].value.address = 'Shevchenko, 45, Berdychiv'
     q.home[1].value.unit = '1234'
-    q.home[1].value.apt = 'apt home ... '
+    q.home[1].value.apt = ''
     q.home[1].value.state = 'MN'
     q.home[1].value.zip = '4321'
 
@@ -250,7 +250,7 @@ const renters = () => {
 // health()
 // medicare()
 // commercial()
-bike()
+// bike()
 // renters()
 
 export default q

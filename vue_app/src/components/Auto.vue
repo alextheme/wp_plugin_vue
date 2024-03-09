@@ -218,15 +218,16 @@
                             <div class="q_item_in">
 
                                 <FormKit name="user_name" type="group">
-                                    <template #default="{ value, state: { valid } }">
+                                    <template #default="{ state: { valid } }">
                                         <FormKit
                                             v-model="field.value.address"
                                             name="address"
                                             label="Address"
                                             type="text"
                                             :validation="field.validation.address"
-                                            @input="validateAddress(field, 'address', i, $event.value, valid)"
+                                            @input="validateAddress(field, 'address', i, $event.value)"
                                             @animationstart="checkAnimation"
+                                            :addressValid="addressValid = valid"
                                         />
                                         <FormKit
                                             v-model="field.value.unit"
@@ -234,8 +235,9 @@
                                             label="Unit #"
                                             type="text"
                                             :validation="field.validation.unit"
-                                            @input="validateAddress(field, 'unit', i, $event.value, valid)"
+                                            @input="validateAddress(field, 'unit', i, $event.value)"
                                             @animationstart="checkAnimation"
+                                            :addressValid="addressValid = valid"
                                         />
                                         <FormKit
                                             v-model="field.value.apt"
@@ -243,8 +245,9 @@
                                             label="Apt or unit (optional)"
                                             type="text"
                                             :validation="field.validation.apt"
-                                            @input="validateAddress(field, 'apt', i, $event.value, valid)"
+                                            @input="validateAddress(field, 'apt', i, $event.value)"
                                             @animationstart="checkAnimation"
+                                            :addressValid="addressValid = valid"
                                         />
 
                                         <div class="select_dropdown">
@@ -253,7 +256,7 @@
                                                 name="state"
                                                 :default="field.value.state"
                                                 :options="field.options"
-                                                @input="validateAddress(field, 'state', i, $event.value, valid)"
+                                                @input="validateAddress(field, 'state', i, $event.value)"
                                             />
                                         </div>
 
@@ -263,8 +266,9 @@
                                             type="text"
                                             name="zip"
                                             :validation="field.validation.zip"
-                                            @input="validateAddress(field, 'zip', i, $event.value, valid)"
+                                            @input="validateAddress(field, 'zip', i, $event.value)"
                                             @animationstart="checkAnimation"
+                                            :addressValid="addressValid = valid"
                                         />
                                     </template>
                                 </FormKit>
@@ -326,6 +330,7 @@ export default {
             tabs: [13, 24, -1],
             isValidDate: {mm: false, dd: false, yyyy: false},
             userNameValid: false,
+            addressValid: false,
             userNameObj: '',
             company_name: '',
             autofilled: false,
@@ -623,26 +628,28 @@ export default {
 
             this.scrollController(key, id)
         },
-        validateAddress(field, name, id, value, valid) {
-            let selectedState = !!field.value.state
+        validateAddress(field, name, id, value) {
+            setTimeout(() => {
+                let selectedState = !!field.value.state
 
-            if (name === 'state') {
-                field.value.state = value
-                selectedState = !!value
-            }
+                if (name === 'state') {
+                    field.value.state = value
+                    selectedState = !!value
+                }
 
-            if (this.autofilled) {
-                setTimeout(() => {
-                    field.complete = !!field.value.address && !!field.value.unit && !!field.value.state && !!field.value.zip
-                }, 0)
-            } else {
-                field.complete = valid && selectedState
-                field.onInput = true
-            }
+                if (this.autofilled) {
+                    setTimeout(() => {
+                        field.complete = !!field.value.address && !!field.value.unit && !!field.value.state && !!field.value.zip
+                    }, 0)
+                } else {
+                    field.complete = this.addressValid && selectedState
+                    field.onInput = true
+                }
 
-            this.setStatusCompleteQuestions()
+                this.setStatusCompleteQuestions()
 
-            this.scrollController(field.type, id)
+                this.scrollController(field.type, id)
+            }, 100)
         },
 
         /** Check Autofill */
@@ -679,6 +686,10 @@ export default {
                         if ([inxUserName, inxBirth, inxAddr, inxAddr2].includes(inxQ)) {
                             complete = q.complete
 
+                            if (q.type === 'address' && q.complete === undefined) {
+                                complete = !!(q.value.address && q.value.unit && q.value.state && q.value.zip)
+                            }
+
                             if (q.type === 'user_name' && !q.onInput) {
                                 q.onInput = false
                                 complete = !!q.value.full_name && !!q.value.last_name
@@ -692,7 +703,7 @@ export default {
                     }
 
 
-                        // TYPE Checkbox
+                    // TYPE Checkbox
                     // Value is Array
                     else if (typeof q.value === 'object' && Array.isArray(q.value) && q.value !== null) {
                         complete = q.value.length > 0
@@ -870,6 +881,9 @@ export default {
             content += `<span>Auto Form</span>`
             content += `<br>`
             this.questions.forEach(qsn => {
+
+                console.log(qsn.value)
+
                 let value = ''
                 switch (qsn.type) {
                     case 'select_auto':
