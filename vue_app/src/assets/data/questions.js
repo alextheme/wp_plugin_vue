@@ -9,6 +9,9 @@ import {
 import motorcycle from './moto.js'
 import { motorcycleCheckbox, motorcycleDatabase } from './moto.js'
 
+// example validation rule
+// :validation="[['required'], ['matches', /^\d{3}-\d{3}-\d{4}$/]]"
+
 // TODO: Required option Appears during the required question
 // Select ‘Not Sure’ if you don’t know what coverage you want.
 // Your Information is safe & secure
@@ -176,7 +179,7 @@ const formData = {
             options: {
                 years: ['Select Vehicle Year', ...Array.from({ length: (2024 - 1990) + 1 }, (_, i) => '' + (1990 + i)).reverse()],
                 makes: ["Select Make"],
-                models: ['Select Model', 'QASHQAI Hybrid', 'BMW 5', 'X-TRAIL Hybrid', 'QASHQAI', 'JUKE', 'LEAF'],
+                models: ['Select Model'],
             },
             load: {
                 years: false,
@@ -376,13 +379,13 @@ const formData = {
             title: 'What year was your home built?',
             value: '',
             type: 'number',
-            validation: 'required|number',
+            validation: 'required|number|between:1900,2025',
         },
         {
             title: 'What is the square footage?',
             value: '',
             type: 'number',
-            validation: 'required|number',
+            validation: 'required|number|between:1,2000',
         },
         {
             title: 'How many stories is your home?',
@@ -406,7 +409,7 @@ const formData = {
             title: 'What year did you purchase your home?',
             value: '',
             type: 'number',
-            validation: 'required|number',
+            validation: 'required|number|between:1900,2025',
         },
         whatIsYourName,
         whatIsYourDateOfBirth,
@@ -444,12 +447,17 @@ const formData = {
                 ft: '',
                 in: ''
             },
+            validation: {
+                ft: 'required|number',
+                in: 'required|number',
+            },
             type: 'size_two',
         },
         {
             title: 'How Much Do you Weigh?',
             value: '',
             type: 'size',
+            validation: 'required|number',
         },
         {
             title: "Do You Use Tobacco?",
@@ -610,7 +618,8 @@ const formData = {
                     'Select Other Make',
                     ...motorcycleDatabase
                         .map(moto => moto.make[0].toUpperCase() + moto.make.toLowerCase().slice(1))
-                        .filter(make => !motorcycleCheckbox.map(e => e.toLowerCase()).includes(make.toLowerCase()))
+                        .filter(make => !motorcycleCheckbox.map(e => e.toLowerCase()).includes(make.toLowerCase())),
+                    'Another',
                 ]
             },
             type: 'radio_select',

@@ -128,7 +128,7 @@
                                     <FormKit
                                         v-model="field.value.mm"
                                         type="number"
-                                        label="MM"
+                                        label="Month"
                                         number
                                         name="mm"
                                         :value="field.value.mm"
@@ -140,7 +140,7 @@
                                     <FormKit
                                         v-model="field.value.dd"
                                         type="number"
-                                        label="DD"
+                                        label="Day"
                                         number
                                         name="dd"
                                         :value="field.value.dd"
@@ -152,7 +152,7 @@
                                     <FormKit
                                         v-model="field.value.yyyy"
                                         type="number"
-                                        label="YYYY"
+                                        label="Year"
                                         number
                                         name="yyyy"
                                         :value="field.value.yyyy"
@@ -187,7 +187,9 @@
                                         name="full_name"
                                         help=""
                                         placeholder="Full Name"
-                                        validation="required|length:3"
+                                        :validation="field.validation.full_name"
+
+                                        :user_name_valid="userNameValid = valid"
                                         @input="validateUserName(field, valid, 'full_name', i)"
                                         @animationstart="checkAnimation"
                                     />
@@ -199,7 +201,9 @@
                                         name="last_name"
                                         help=""
                                         placeholder="Last Name"
-                                        validation="required|length:3"
+                                        :validation="field.validation.last_name"
+
+                                        :user_name_valid="userNameValid = valid"
                                         @input="validateUserName(field, valid, 'last_name', i)"
                                         @animationstart="checkAnimation"
                                     />
@@ -209,63 +213,64 @@
                         </li>
 
                         <li v-if="field.type === 'address' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--address_mod', {show: field.show, complete: field.complete} ]">
-                        <question-header :title="field.title" :descr="field.descr" />
+                            <question-header :title="field.title" :descr="field.descr" />
 
-                        <div class="q_item_in">
+                            <div class="q_item_in">
 
-                            <FormKit name="user_name" type="group">
-                                <template #default="{ value, state: { valid } }">
-                                    <FormKit
-                                        v-model="field.value.address"
-                                        name="address"
-                                        label="Address"
-                                        type="text"
-                                        validation="required|length:10"
-                                        @input="validateAddress(field, 'address', i, $event.value, valid)"
-                                        @animationstart="checkAnimation"
-                                    />
-                                    <FormKit
-                                        v-model="field.value.unit"
-                                        name="unit"
-                                        label="Unit #"
-                                        type="text"
-                                        validation="required|number"
-                                        @input="validateAddress(field, 'unit', i, $event.value, valid)"
-                                        @animationstart="checkAnimation"
-                                    />
-                                    <FormKit
-                                        v-model="field.value.apt"
-                                        name="apt"
-                                        label="Apt or unit (optional)"
-                                        type="text"
-                                        @input="validateAddress(field, 'apt', i, $event.value, valid)"
-                                        @animationstart="checkAnimation"
-                                    />
-
-                                    <div class="select_dropdown">
-                                        <label>State: </label>
-                                        <select-dropdown
-                                            name="state"
-                                            :default="field.value.state"
-                                            :options="field.options"
-                                            @input="validateAddress(field, 'state', i, $event.value, valid)"
+                                <FormKit name="user_name" type="group">
+                                    <template #default="{ value, state: { valid } }">
+                                        <FormKit
+                                            v-model="field.value.address"
+                                            name="address"
+                                            label="Address"
+                                            type="text"
+                                            :validation="field.validation.address"
+                                            @input="validateAddress(field, 'address', i, $event.value, valid)"
+                                            @animationstart="checkAnimation"
                                         />
-                                    </div>
+                                        <FormKit
+                                            v-model="field.value.unit"
+                                            name="unit"
+                                            label="Unit #"
+                                            type="text"
+                                            :validation="field.validation.unit"
+                                            @input="validateAddress(field, 'unit', i, $event.value, valid)"
+                                            @animationstart="checkAnimation"
+                                        />
+                                        <FormKit
+                                            v-model="field.value.apt"
+                                            name="apt"
+                                            label="Apt or unit (optional)"
+                                            type="text"
+                                            :validation="field.validation.apt"
+                                            @input="validateAddress(field, 'apt', i, $event.value, valid)"
+                                            @animationstart="checkAnimation"
+                                        />
 
-                                    <FormKit
-                                        v-model="field.value.zip"
-                                        label="Enter ZIP Code"
-                                        type="text"
-                                        name="zip"
-                                        validation="required|number"
-                                        @input="validateAddress(field, 'zip', i, $event.value, valid)"
-                                        @animationstart="checkAnimation"
-                                    />
-                                </template>
-                            </FormKit>
+                                        <div class="select_dropdown">
+                                            <label>State: </label>
+                                            <select-dropdown
+                                                name="state"
+                                                :default="field.value.state"
+                                                :options="field.options"
+                                                @input="validateAddress(field, 'state', i, $event.value, valid)"
+                                            />
+                                        </div>
 
-                        </div>
-                    </li>
+                                        <FormKit
+                                            v-model="field.value.zip"
+                                            label="Enter ZIP Code"
+                                            type="text"
+                                            name="zip"
+                                            :validation="field.validation.zip"
+                                            @input="validateAddress(field, 'zip', i, $event.value, valid)"
+                                            @animationstart="checkAnimation"
+                                        />
+                                    </template>
+                                </FormKit>
+
+                            </div>
+                        </li>
 
                     </template>
                 </template>
@@ -320,6 +325,7 @@ export default {
             tab: { active: 0, complete: [0, 0, 0, 0], available: [0, 0, 0, 0] },
             tabs: [13, 24, -1],
             isValidDate: {mm: false, dd: false, yyyy: false},
+            userNameValid: false,
             userNameObj: '',
             company_name: '',
             autofilled: false,
@@ -390,8 +396,6 @@ export default {
         /** Load Data */
         loadAutoData(field, key, event, id) {
             const self = this
-
-            console.log('click')
 
             if (!event.target.classList.contains('selected')) {
                 self.scrollController(key, id)
@@ -606,15 +610,16 @@ export default {
             }
         },
         validateUserName(field, valid, key, id) {
-            if (this.autofilled) {
-                setTimeout(() => {
+
+            setTimeout(() => {
+                if (this.autofilled) {
                     field.complete = !!field.value.full_name && !!field.value.last_name
-                }, 0)
-            } else {
-                field.complete = valid
-                field.onInput = true
-                this.userNameObj = field.value
-            }
+                } else {
+                    field.complete = this.userNameValid
+                    field.onInput = true
+                    this.userNameObj = field.value
+                }
+            }, 300)
 
             this.scrollController(key, id)
         },
@@ -629,7 +634,6 @@ export default {
             if (this.autofilled) {
                 setTimeout(() => {
                     field.complete = !!field.value.address && !!field.value.unit && !!field.value.state && !!field.value.zip
-                    console.log(field.complete)
                 }, 0)
             } else {
                 field.complete = valid && selectedState
@@ -897,10 +901,6 @@ export default {
                 content: content,
             }
 
-            console.log(data.user_name, data.car_make, data.car_make2)
-            console.log()
-            console.log(content)
-
             jQuery.ajax({
                 url: sfi_params.adminUri,
                 type: 'post',
@@ -910,7 +910,7 @@ export default {
                     data,
                 },
                 success: function (data) {
-                    console.log('send: ', data)
+                    console.log('success!')
                 },
                 error: function (error) {
                     console.log(error.message)

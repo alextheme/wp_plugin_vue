@@ -236,37 +236,40 @@
                                 <FormKit
                                     v-model="field.value.mm"
                                     type="number"
-                                    label="MM"
+                                    label="Month"
                                     number
                                     name="mm"
                                     :value="field.value.mm"
                                     :validation-rules="{ validateDate }"
                                     validation="validateDate"
                                     @input="validateDate(field.type, i)"
+                                    validation-visibility="live"
                                 />
 
                                 <FormKit
                                     v-model="field.value.dd"
                                     type="number"
-                                    label="DD"
+                                    label="Day"
                                     number
                                     name="dd"
                                     :value="field.value.dd"
                                     :validation-rules="{ validateDate }"
                                     validation="validateDate"
                                     @input="validateDate(field.type, i)"
+                                    validation-visibility="live"
                                 />
 
                                 <FormKit
                                     v-model="field.value.yyyy"
                                     type="number"
-                                    label="YYYY"
+                                    label="Year"
                                     number
                                     name="yyyy"
                                     :value="field.value.yyyy"
                                     :validation-rules="{ validateDate }"
                                     validation="validateDate"
                                     @input="validateDate(field.type, i)"
+                                    validation-visibility="live"
                                 />
                             </FormKit>
                         </div>
@@ -295,9 +298,12 @@
                                     name="full_name"
                                     help=""
                                     placeholder="Full Name"
-                                    validation="required|length:3"
+                                    :validation="field.validation.full_name"
+
+                                    :user_name_valid="userNameValid = valid"
                                     @input="validateUserName(field, valid, 'full_name', i)"
                                     @animationstart="checkAnimation"
+                                    validation-visibility="live"
                                 />
 
                                 <FormKit
@@ -307,9 +313,12 @@
                                     name="last_name"
                                     help=""
                                     placeholder="Last Name"
-                                    validation="required|length:3"
+                                    :validation="field.validation.last_name"
+
+                                    :user_name_valid="userNameValid = valid"
                                     @input="validateUserName(field, valid, 'last_name', i)"
                                     @animationstart="checkAnimation"
+                                    validation-visibility="live"
                                 />
                             </template>
 
@@ -328,7 +337,7 @@
                                         name="address"
                                         label="Address"
                                         type="text"
-                                        validation="required|length:10"
+                                        :validation="field.validation.address"
                                         @input="validateAddress(field, 'address', i, $event.value, valid)"
                                         @animationstart="checkAnimation"
                                     />
@@ -337,7 +346,7 @@
                                         name="unit"
                                         label="Unit #"
                                         type="text"
-                                        validation="required|number"
+                                        :validation="field.validation.unit"
                                         @input="validateAddress(field, 'unit', i, $event.value, valid)"
                                         @animationstart="checkAnimation"
                                     />
@@ -346,6 +355,7 @@
                                         name="apt"
                                         label="Apt or unit (optional)"
                                         type="text"
+                                        :validation="field.validation.apt"
                                         @input="validateAddress(field, 'apt', i, $event.value, valid)"
                                         @animationstart="checkAnimation"
                                     />
@@ -365,7 +375,7 @@
                                         label="Enter ZIP Code"
                                         type="text"
                                         name="zip"
-                                        validation="required|number"
+                                        :validation="field.validation.zip"
                                         @input="validateAddress(field, 'zip', i, $event.value, valid)"
                                         @animationstart="checkAnimation"
                                     />
@@ -386,7 +396,7 @@
                                         name="address"
                                         label="Address"
                                         type="text"
-                                        validation="required|length:10"
+                                        :validation="field.validation.address"
                                         @input="validateAddress(field, 'address', i, $event.value, valid)"
                                         @animationstart="checkAnimation"
                                     />
@@ -394,7 +404,7 @@
                                         name="unit"
                                         label="Unit #"
                                         type="text"
-                                        validation="required|number"
+                                        :validation="field.validation.unit"
                                         @input="validateAddress(field, 'unit', i, $event.value, valid)"
                                         @animationstart="checkAnimation"
                                     />
@@ -402,7 +412,7 @@
                                         name="city"
                                         label="City"
                                         type="text"
-                                        validation="required|length:3"
+                                        :validation="field.validation.city"
                                         @input="validateAddress(field, 'city', i, $event.value, valid)"
                                         @animationstart="checkAnimation"
                                     />
@@ -421,12 +431,10 @@
                                         label="Enter ZIP Code"
                                         type="text"
                                         name="zip"
-                                        validation="required"
+                                        :validation="field.validation.zip"
                                         @input="validateAddress(field, 'zip', i, $event.value, valid)"
                                         @animationstart="checkAnimation"
                                     />
-
-                                    <div style="display: none">{{ valid }}</div>
                                 </template>
                             </FormKit>
                         </div>
@@ -440,7 +448,7 @@
                             label="lbs."
                             number
                             name="lbs"
-                            validation="required|number"
+                            :validation="field.validation"
                             :delay="500"
                             @input="scrollController(field.type, i)"
                         />
@@ -464,7 +472,7 @@
                                         label="ft."
                                         number
                                         name="ft"
-                                        validation="required|number"
+                                        :validation="field.validation.ft"
                                         :delay="500"
                                         @input="scrollController(field.type, i)"
                                     />
@@ -474,7 +482,7 @@
                                         label="in."
                                         number
                                         name="in"
-                                        validation="required|number"
+                                        :validation="field.validation.in"
                                         :delay="500"
                                         @input="scrollController(field.type, i)"
                                     />
@@ -489,19 +497,21 @@
                         <question-header :title="field.title" :descr="field.descr" />
 
                         <FormKit :name="'user_' + field.type" type="group">
-                            <template #default="{ value, state: { valid } }">
+                            <template #default="{ state: { valid } }">
                                 <FormKit
                                     v-model="field.value"
                                     :type="field.type"
                                     :name="field.name || field.title"
                                     :validation="field.validation"
-                                    @input="validateText(field, i, valid)"
+                                    :delay="0"
+
+                                    validation-visibility="live"
                                     @animationstart="checkAnimation"
+                                    :complete="field.complete = valid"
+                                    @input="validateText(field, i)"
                                 />
                             </template>
                         </FormKit>
-
-                        <div v-if="debug">{{ field.value }}</div>
                     </li>
 
                 </template>
@@ -557,6 +567,7 @@ export default {
             nav: { auto: ['Vehicles', 'Drivers', 'Final Details', 'Quotes'], home: ['Home', 'Owner', 'Final Details', 'Quotes'] },
             tabs: { auto: [13, 24, -1], home: [8, 15, -1] }, // Only tabs with a list of questions, do not include the final tab. -1 === All other questions
             isValidDate: {mm: false, dd: false, yyyy: false},
+            userNameValid: false,
             userNameObj: '',
             auto_make: '',
             company_name: '',
@@ -707,10 +718,6 @@ export default {
                         self.questions[0].load.models = false
                     })
             }
-
-            // if (fieldType === 'select_auto__model') {
-            //     return
-            // }
         },
 
         /** Validate Field */
@@ -761,8 +768,6 @@ export default {
                 const self = this
                 setTimeout(() => {
                     if ('yes' === field.value?.toLowerCase()) {
-                        console.log('yes!!', i)
-
                         self.tabs.auto = [13, 24, -1]
                     } else {
                         self.tabs.auto = [8, 19, -1]
@@ -867,53 +872,52 @@ export default {
                 return -1
             }
         },
-        validateUserName(field, valid, fieldType, id) {
-            if (this.autofilled) {
-                setTimeout(() => {
-                    field.complete = !!field.value.full_name && !!field.value.last_name
-                }, 0)
-            } else {
-                field.complete = valid
-                field.onInput = true
-                this.userNameObj = field.value
-            }
-
-            this.scrollController(fieldType, id)
-        },
-        validateAddress(field, name, id, value, valid) {
-            let selectedState = !!field.value.state
-
-            if (name === 'state') {
-                field.value.state = value
-                selectedState = !!value
-            }
-
-            if (this.autofilled) {
-                setTimeout(() => {
-                    field.complete = !!field.value.address && !!field.value.unit && !!field.value.state && !!field.value.zip
-                    console.log(field.complete)
-                }, 0)
-            } else {
-                field.complete = valid && selectedState
-                field.onInput = true
-            }
-
-            this.setStatusCompleteQuestions()
-
-            this.scrollController(field.type, id)
-        },
-        validateText(field, id, valid) {
-            field.complete = false
+        validateUserName(field, valid, key, id) {
 
             setTimeout(() => {
                 if (this.autofilled) {
-                    field.complete = !!field.value
+                    field.complete = !!field.value.full_name && !!field.value.last_name
                 } else {
-                    if (field.value.length > 1) {
-                        field.complete = valid
-                    }
+                    field.complete = this.userNameValid
+                    field.onInput = true
+                    this.userNameObj = field.value
                 }
+            }, 300)
+
+            this.scrollController(key, id)
+        },
+        validateAddress(field, name, id, value, valid) {
+            const self = this
+
+            setTimeout(() => {
+
+                let selectedState = !!field.value.state
+
+                if (name === 'state') {
+                    field.value.state = value
+                    selectedState = !!value
+                }
+
+                if (this.autofilled) {
+                    setTimeout(() => {
+                        field.complete = !!field.value.address && !!field.value.unit && !!field.value.state && !!field.value.zip
+                    }, 0)
+                } else {
+                    field.complete = valid && selectedState
+                    field.onInput = true
+                }
+
+                self.setStatusCompleteQuestions()
+
+                self.scrollController(field.type, id)
+
             }, 0)
+        },
+        validateText(field, id) {
+
+            if (self.autofilled) {
+                field.complete = !!field.value
+            }
 
             this.scrollController(field.type, id)
         },
@@ -972,13 +976,6 @@ export default {
                                 q.onInput = false
                                 complete = !!q.value.full_name && !!q.value.last_name
                             }
-
-                            // // console.log('type: ',q.type)
-                            // if (q.type === 'user_name' && !q.onInput) {
-                            //     q.onInput = false
-                            //     complete = !!q.value.full_name && !!q.value.last_name
-                            // }
-
                         }
 
                         // Для всих остальних
@@ -988,7 +985,7 @@ export default {
                     }
 
 
-                        // TYPE Checkbox
+                    // TYPE Checkbox
                     // Value is Array
                     else if (typeof q.value === 'object' && Array.isArray(q.value) && q.value !== null) {
                         complete = q.value.length > 0
@@ -996,7 +993,10 @@ export default {
 
                     // Email
                     else if (['email', 'text', 'number'].includes(q.type)) {
-                        complete = q.complete
+                        complete = q.complete === undefined ? !!q.value : q.complete
+
+                        // if (q.title === 'What year was your home built?')
+                        //     console.log('set status: ', q.title, q.complete)
                     }
 
                     // Value is String
@@ -1007,7 +1007,6 @@ export default {
 
                 q.complete = complete
             })
-
 
         },
 
@@ -1223,7 +1222,7 @@ export default {
                     },
                 },
                 success: function (data) {
-                    console.log('send: ', data)
+                    console.log('success!')
                 },
                 error: function (error) {
                     console.log(error.message)

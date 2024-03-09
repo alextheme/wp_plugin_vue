@@ -18,12 +18,26 @@ export const address =  {
 
         'DC', 'AS', 'GU', 'MP', 'PR', 'VI'
     ],
+    validation: {
+        address: 'required|length:10',
+        unit: 'required|number',
+        apt: '',
+        state: '',
+        zip: 'required'
+    },
     type: 'address',
 }
 
 export const addressV2   =  {
     ...address,
-    city: '',
+    value: {
+        ...address.value,
+        city: ''
+    },
+    validation: {
+        ...address.validation,
+        city: 'required|length:3'
+    },
     type: 'address_v2',
 }
 
@@ -38,6 +52,8 @@ export const whatIsYourDateOfBirth = {
             show: false
         }
     },
+    // validation in function "validateDate()" and "validateAge()"
+    validation: '',
     type: 'user_birth',
 }
 
@@ -47,6 +63,10 @@ export const whatIsYourName =  {
     value: {
         full_name: '',
         last_name: ''
+    },
+    validation: {
+        full_name: 'required|length:3',
+        last_name: 'required|length:3'
     },
     type: 'user_name',
 }
