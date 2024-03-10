@@ -262,7 +262,7 @@ const formData = {
             complete: false,
             type: 'select_auto',
             key: 'select_auto2',
-                group: 'vehicle2',
+            group: 'vehicle2',
         },
         {
             title: 'Second Vehicle: What do you use your %%second_auto_make%% for?',

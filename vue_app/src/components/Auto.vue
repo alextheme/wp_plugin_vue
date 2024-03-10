@@ -787,23 +787,34 @@ export default {
             this.tab.available[this.tab.available.length - 1] = 0
         },
         managerShowQuestions() {
-            this.questions.forEach((q, i, questions) => {
 
-                if ( ! (!this.isSecondVehicle && q.group === 'vehicle2')) {
-                    if (q.show && q.complete) {
-                        const next = questions[i + 1]
-                        if (next) next.show = true
+            setTimeout(() => {
+                for (let i = 0; i < this.questions.length; i++) {
+                    let q = this.questions[i]
+                    let next = this.questions[i + 1]
+
+
+                    if (!this.isSecondVehicle) {
+                        if (q.group === 'vehicle2') continue
+
+                        if (next?.group === 'vehicle2') {
+                            next = this.questions.find((e, n) => n > i && e.group !== 'vehicle2')
+                        }
                     }
-                    if (q.show && !q.complete) {
-                        const next = questions[i + 1]
-                        if (next) next.show = false
-                    }
-                    if (!q.show) {
-                        const next = questions[i + 1]
-                        if (next) next.show = false
+
+                    if (next) {
+                        if (q.show && q.complete) {
+                            next.show = true
+                        }
+                        if (q.show && !q.complete) {
+                            next.show = false
+                        }
+                        if (!q.show) {
+                            next.show = false
+                        }
                     }
                 }
-            })
+            }, 100)
         },
         goTab(tab, isButton = false) {
             this.tab.active = tab
