@@ -7,23 +7,38 @@ export const address =  {
         state: '',
         zip: ''
     },
-    options: ['State...', 'AB', 'BC', 'CD', 'AA', 'FD', 'RP'],
+    options: [
+        'State...',
+
+        'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA',
+        'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD',
+        'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ',
+        'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC',
+        'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY',
+
+        'DC', 'AS', 'GU', 'MP', 'PR', 'VI'
+    ],
+    validation: {
+        address: 'required|length:10',
+        unit: 'required|number',
+        apt: '',
+        state: '',
+        zip: 'required'
+    },
     type: 'address',
-    formKitvalid: false,
 }
 
 export const addressV2   =  {
-    title: "What is your address?",
+    ...address,
     value: {
-        address: '',
-        unit: '',
-        city: '',
-        state: '',
-        zip: ''
+        ...address.value,
+        city: ''
     },
-    options: ['State...', 'AB', 'BC', 'CD', 'AA', 'FD', 'RP'],
+    validation: {
+        ...address.validation,
+        city: 'required|length:3'
+    },
     type: 'address_v2',
-    formKitvalid: false,
 }
 
 export const whatIsYourDateOfBirth = {
@@ -37,6 +52,8 @@ export const whatIsYourDateOfBirth = {
             show: false
         }
     },
+    // validation in function "validateDate()" and "validateAge()"
+    validation: '',
     type: 'user_birth',
 }
 
@@ -46,6 +63,10 @@ export const whatIsYourName =  {
     value: {
         full_name: '',
         last_name: ''
+    },
+    validation: {
+        full_name: 'required|length:3',
+        last_name: 'required|length:3'
     },
     type: 'user_name',
 }
@@ -159,12 +180,33 @@ export const areYouCurrentlyInsured = {
 export const whatCompanyAreYouInsuredWith = {
     title: "What company are you insured with?",
     value: '',
-    options: ['Select Company', 'Company 1', 'Company 2', 'Company 3'],
+    options: [
+        'Select Company',
+        '21st Century Insurance',
+        'AAA Insurance Co.',
+        'Allstate',
+        'American Family',
+        'AMICA',
+        'Country Financial',
+        'Esurance',
+        'Farmers',
+        'Geico',
+        'Liberty Mutual',
+        'Mercury',
+        'Nationwide',
+        'Progressive',
+        'State Farm',
+        'The Hartford',
+        'Travelers',
+        'USAA',
+        'Other'
+    ],
     type: 'select',
+    key: 'select_company',
 }
 
 export const howLongHaveYouBeenWithCompany = {
-    title: "How long have you been with AAA Insurance Co.?",
+    title: "How long have you been with %%company_name%%?",
     value: '',
     options: ['Less than a year', '1-2 years', '2-3 years', '3-5 years', '5+ years'],
     type: 'radio',

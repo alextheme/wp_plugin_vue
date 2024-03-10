@@ -129,25 +129,26 @@ class Pdf {
         // https://mailtrap.io/blog/phpmailer-gmail/
         $mail = new PHPMailer();
         $mail->IsSMTP(); // enable SMTP
-        $mail->Host = "smtp.gmail.com";
-        $mail->SMTPAuth = true; // authentication enabled
-        $mail->Username = "alex0987743778@gmail.com";
-        $mail->Password = "vyky lvpv nxap fmnj";
-        $mail->Port = 465; // or 587
-        // $mail->SMTPDebug = 1; // to view proper logging details for success and error messages
-        $mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
-        $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for Gmail
+        $mail->Host         = get_option( 'mail_host' );
+        $mail->SMTPAuth     = true; // authentication enabled
+        $mail->Username     = get_option( 'mail_user_name' );
+        $mail->Password     = get_option( 'mail_password' );
+        $mail->Port         = get_option( 'mail_port' ); //465 or 587
 
-        $from_email_address = 'alex0987743778@gmail.com';
-        $recepient_email_address = 'favorstreet21@gmail.com';
-        $from_name = 'Oleksander';
-        $recepient_name = 'Shurik';
+        // SMTPDebug - to view proper logging details for success and error messages
+        $mail->SMTPDebug    = 1; // debugging: 1 = errors and messages, 2 = messages only
+        $mail->SMTPSecure   = get_option( 'mail_smtp_secure' ); //ssl - secure transfer enabled REQUIRED for Gmail
+
+        $from_email_address = get_option( 'from_email' );
+        $recipient_email_address = get_option( 'recipient_email' );
+        $from_name          = get_option( 'from_name' );
+        $recipient_name     = get_option( 'recipient_name' );
 
         //sender information
         $mail->setFrom($from_email_address, $from_name);
 
         //receiver address and name
-        $mail->addAddress($recepient_email_address, $recepient_name);
+        $mail->addAddress($recipient_email_address, $recipient_name);
 
 
         // Add cc or bcc
@@ -159,10 +160,8 @@ class Pdf {
 
         $mail->isHTML(true);
 
-        $mail->Subject = 'PHPMailer SMTP test';
-        $mail->Body    = "<h4> PHPMailer the awesome Package </h4>
-        <b>PHPMailer is working fine for sending mail</b>
-        <p> This is a tutorial to guide you on PHPMailer integration</p>";
+        $mail->Subject      = get_option( 'mail_subject' );
+        $mail->Body         = get_option( 'mail_body' );
 
         // Send mail
         if (!$mail->send()) {

@@ -18,8 +18,10 @@ export const serve = done => {
 }
 
 export const reload = done => {
-    server.reload()
-    done()
+    setTimeout(() => {
+        server.reload()
+        done()
+    }, 500)
 }
 
 export default series(serve, watchForChanges)

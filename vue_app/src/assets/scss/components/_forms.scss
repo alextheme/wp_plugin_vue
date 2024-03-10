@@ -1,7 +1,19 @@
 :root {
   --form_header_height: 6.5rem;
   --done-padding: 40rem;
+  //text-transform: capitalize;
 }
+
+/* input autofill */
+:-webkit-autofill {
+  animation-name: onAutoFillStart;
+}
+:not(:-webkit-autofill) {
+  animation-name: onAutoFillCancel;
+}
+@keyframes onAutoFillStart { from {} to {} }
+@keyframes onAutoFillCancel { from {} to {} }
+/* input autofill */
 
 body {
   overflow-x: hidden;
@@ -853,7 +865,7 @@ body {
   .form_pptu_descr {
     @extend %descr;
 
-    color: $blue;
+      color: $blue;
 
     p {
       &:not(:last-child) {
@@ -861,12 +873,10 @@ body {
       }
 
       a {
-        @extend %transition_opacity;
-
-        text-decoration: underline;
+        color: $lincks_blue;
 
         &:hover {
-          opacity: .6;
+          text-decoration: underline;
         }
       }
     }

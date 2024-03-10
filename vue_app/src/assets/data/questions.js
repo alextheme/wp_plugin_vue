@@ -6,6 +6,30 @@ import {
     whatIsYourName, whatIsYourOccupation, whatIsYourPhoneNumber, whatTypeOfHomeDoYouLiveIn
 } from "./questions-export.js";
 
+import motorcycle from './moto.js'
+import { motorcycleCheckbox, motorcycleDatabase } from './moto.js'
+
+// example validation rule
+// :validation="[['required'], ['matches', /^\d{3}-\d{3}-\d{4}$/]]"
+
+// TODO: Required option Appears during the required question
+// Select ‘Not Sure’ if you don’t know what coverage you want.
+// Your Information is safe & secure
+// Insurance companies require this in order to provide an accurate quote.
+// No Spam Guaranteed
+// Your life insurance quotes are ready
+
+// TODO: Type of Ticket
+// type_of_ticket: [
+//     'Speeding less than 10 mph over',
+//     'Speeding more than 10 mph over',
+//     'Speeding more than 20 mph over',
+//     'Drug possession',
+//     'Minor in possession',
+//     'Open Container',
+//     'DUI/DWI',
+// ]
+
 const formData = {
     test: [
         {
@@ -144,6 +168,7 @@ const formData = {
     ],
 
     auto: [
+        // tab 1
         {
             title: "Let's get started, what car do you drive?",
             value: {
@@ -154,8 +179,7 @@ const formData = {
             options: {
                 years: ['Select Vehicle Year', ...Array.from({ length: (2024 - 1990) + 1 }, (_, i) => '' + (1990 + i)).reverse()],
                 makes: ["Select Make"],
-                // make: ["Select Make", "Acura", "Audi", "BMW", "Buick", "Cadillac", "Chevrolet", "Genesis", "GMC", "Honda", "Hyundai", "INFINITI", "Jaguar", "Kia", "Land Rover", "Lincoln", "Mazda", "MINI", "Mitsubishi", "Nissan", "Polestar", "Subaru", "Toyota", "Volvo", "Alfa Romeo", "Bentley", "Chrysler", "Dodge", "FIAT", "Ford", "Jeep", "Karma", "Lamborghini", "Lexus", "Lucid", "Maserati", "McLaren", "Mercedes-Benz", "Porsche", "Ram", "Rivian", "Rolls-Royce", "Tesla", "Volkswagen", "Aston Martin", "Lotus", "Ferrari", "smart", "Scion", "Suzuki", "Fisker", "Maybach", "Saab", "Mercury", "HUMMER", "Pontiac", "Bugatti", "Saturn", "Spyker", "Isuzu", "Panoz", "Oldsmobile", "Daewoo", "Plymouth", "AM General", "Eagle", "Geo", "VinFast" ],
-                models: ['Select Model', 'QASHQAI Hybrid', 'BMW 5', 'X-TRAIL Hybrid', 'QASHQAI', 'JUKE', 'LEAF'],
+                models: ['Select Model'],
             },
             load: {
                 years: false,
@@ -165,6 +189,7 @@ const formData = {
             show: true,
             complete: false,
             type: 'select_auto',
+            key: 'select_auto',
         },
         {
             title: 'What do you use your %%auto_make%% for?',
@@ -172,7 +197,6 @@ const formData = {
             options: ['Getting to Work', 'Running Errands', 'Pleasure', 'Uber / Lyft'],
             type: 'radio',
         },
-        whatIsYourDateOfBirth,
         {
             title: 'How many miles per day do you drive?',
             descr: 'Most drivers average 30 per day',
@@ -181,7 +205,7 @@ const formData = {
             type: 'radio',
         },
         {
-            title: 'Do you own your %%auto_make%% GT-R?',
+            title: 'Do you own your %%auto_make%%?',
             descr: 'Drivers who lease or finance may need more coverage',
             value: '',
             options: ['Own', 'Lease', 'Finance'],
@@ -214,9 +238,69 @@ const formData = {
             value: '',
             options: ['Yes', 'No'],
             type: 'radio',
+            key: 'add_second_vehicle',
         },
-        whatIsYourName,
-        // whatIsYourDateOfBirth,
+
+        /** Second Vehicle */
+        {
+            title: "Second Vehicle: What car do you drive?",
+            value: {
+                auto_year: '',
+                auto_make: '',
+                auto_model: '',
+            },
+            options: {
+                years: ['Select Vehicle Year', ...Array.from({ length: (2024 - 1990) + 1 }, (_, i) => '' + (1990 + i)).reverse()],
+                makes: ["Select Make"],
+                models: ['Select Model'],
+            },
+            load: {
+                years: false,
+                makes: false,
+                models: false,
+            },
+            complete: false,
+            type: 'select_auto',
+            key: 'select_auto2',
+            group: 'vehicle2',
+        },
+        {
+            title: 'Second Vehicle: What do you use your %%second_auto_make%% for?',
+            value: '',
+            options: ['Getting to Work', 'Running Errands', 'Pleasure', 'Uber / Lyft'],
+            type: 'radio',
+            group: 'vehicle2',
+        },
+        {
+            title: 'Second Vehicle: How many miles per day do you drive?',
+            descr: 'Most drivers average 30 per day',
+            value: '',
+            options: ['5', '10', '20', '30+'],
+            type: 'radio',
+            group: 'vehicle2',
+        },
+        {
+            title: 'Second Vehicle: Do you own your %%second_auto_make%%?',
+            descr: 'Drivers who lease or finance may need more coverage',
+            value: '',
+            options: ['Own', 'Lease', 'Finance'],
+            type: 'radio',
+            group: 'vehicle2',
+        },
+        {
+            title: 'Second Vehicle: Would You Like Full Coverage or Liability Only?',
+            descr: 'Liability covers damage you cause other drivers or their property.\nFull coverage applies to damage to your vehicle.',
+            value: '',
+            options: ['Full Coverage', 'Liability Only'],
+            type: 'radio',
+            group: 'vehicle2',
+        },
+        // Second Vehicle
+
+
+        // tab 2
+        {...whatIsYourName, show: true},
+        whatIsYourDateOfBirth,
         whatIsYourGender,
         areYouMarried,
         whatIsYourEducationLevel,
@@ -249,6 +333,9 @@ const formData = {
             options: ['Yes', 'No'],
             type: 'radio',
         },
+
+
+        // tab 3
         {
             title: "Do you currently have car insurance?",
             value: '',
@@ -292,13 +379,13 @@ const formData = {
             title: 'What year was your home built?',
             value: '',
             type: 'number',
-            validation: 'required|number',
+            validation: 'required|number|between:1900,2025',
         },
         {
             title: 'What is the square footage?',
             value: '',
             type: 'number',
-            validation: 'required|number',
+            validation: 'required|number|between:1,2000',
         },
         {
             title: 'How many stories is your home?',
@@ -322,7 +409,7 @@ const formData = {
             title: 'What year did you purchase your home?',
             value: '',
             type: 'number',
-            validation: 'required|number',
+            validation: 'required|number|between:1900,2025',
         },
         whatIsYourName,
         whatIsYourDateOfBirth,
@@ -360,12 +447,17 @@ const formData = {
                 ft: '',
                 in: ''
             },
+            validation: {
+                ft: 'required|number',
+                in: 'required|number',
+            },
             type: 'size_two',
         },
         {
             title: 'How Much Do you Weigh?',
             value: '',
             type: 'size',
+            validation: 'required|number',
         },
         {
             title: "Do You Use Tobacco?",
@@ -391,7 +483,6 @@ const formData = {
             options: ['$50,000', '$100,000', '$150,000', '$200,000', '$250,000', '$300,000', '$350,000', '$400,000', '$450,000', '$500,000', '$550,000', '$600,000', '$650,000', '$700,000', '$750,000', '$800,000', '$850,000', '$900,000', '$950,000', '$1,000,000', '$1,250,000', '$1,500,000', '$1,7500,000', '$2,000,000'],
             type: 'radio',
         },
-
         whatIsYourName,
         addressV2,
         whatIsYourEmail,
@@ -400,7 +491,6 @@ const formData = {
 
     health: [
         {...whatIsYourDateOfBirth, show: true},
-
         {
             title: "What is Your Household Income?",
             value: '',
@@ -421,7 +511,6 @@ const formData = {
             ],
             type: 'radio',
         },
-
         whatIsYourName,
         addressV2,
         whatIsYourEmail,
@@ -452,9 +541,7 @@ const formData = {
             type: 'radio',
             show: true,
         },
-
         addressV2,
-
         {
             title: "Brief Description of Your Business",
             value: '',
@@ -509,7 +596,6 @@ const formData = {
             options: ['$1,000,000', '$2,000,000'],
             type: 'radio',
         },
-
         whatIsYourName,
         whatIsYourEmail,
         whatIsYourPhoneNumber,
@@ -527,41 +613,44 @@ const formData = {
             title: 'Select Motorcycle Make',
             value: '',
             options: {
-                radio: ['Harley-Davidson', 'Honda', 'Yamaha', 'Kawasaki', 'Suzuki', 'BMW', 'Ducati', 'Triumph Motorcycle', '__for_select__'],
-                select: ['Select Other Make', 'Make1', 'Make2', 'Make3', 'Make4']
+                radio: [...motorcycleCheckbox, '__for_select__'],
+                select: [
+                    'Select Other Make',
+                    ...motorcycleDatabase
+                        .map(moto => moto.make[0].toUpperCase() + moto.make.toLowerCase().slice(1))
+                        .filter(make => !motorcycleCheckbox.map(e => e.toLowerCase()).includes(make.toLowerCase())),
+                    'Another',
+                ]
             },
             type: 'radio_select',
+            key: 'select_motorcycle_make'
         },
         {
             title: 'Select Motorcycle Model',
             value: '',
             options: ['BR125', 'EJ8000', 'EL450', 'EN650', 'EN651', 'EN652', 'EN653', 'EN654', 'EN655', 'EN656', 'EN657'],
             type: 'radio',
+            key: 'select_motorcycle_models'
         },
-
         areYouCurrentlyInsured,
         whatCompanyAreYouInsuredWith,
         howLongHaveYouBeenWithCompany,
-
         {
             title: 'Are You a Homeowner?',
             value: '',
             options: ['Yes', 'No'],
             type: 'radio',
         },
-
         whatIsYourDateOfBirth,
         whatIsYourGenderMin,
         areYouMarried,
         anyAtFaultAccidentsInTheLast3Years,
-
         {
             title: "DUI in the Last 3 years?",
             value: '',
             options: ['Yes', 'No'],
             type: 'radio',
         },
-
         whatIsYourName,
         addressV2,
         whatIsYourEmail,

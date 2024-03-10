@@ -145,7 +145,7 @@
                         <select-dropdown
                             :default="field.value"
                             :options="field.options"
-                            @input="validateSelect($event.value, i, field.type)"
+                            @input="validateSelect($event.value, i, field)"
                         />
                     </li>
 
@@ -160,7 +160,7 @@
                             v-model="field.value"
                             type="radio"
                             :options="field.options"
-                            @input="scrollController(field.type, i)"
+                            @input="validateRadio(field, i)"
                         />
                     </li>
 
@@ -201,14 +201,14 @@
                                 v-model="field.value"
                                 type="radio"
                                 :options="field.options.radio"
-                                @input="scrollController(field.type, i)"
+                                @input="validateRadioAndSelect($event.value, field, 'radio', i)"
                             />
                             <select-dropdown
                                 id="radio_and_select__select"
                                 name="select_make__select"
                                 :default="field.value"
                                 :options="field.options.select"
-                                @input="field.value = $event.value; scrollController(field.type, i)"
+                                @input="validateRadioAndSelect($event.value, field, 'select', i)"
                             />
                         </div>
                     </li>
@@ -236,37 +236,40 @@
                                 <FormKit
                                     v-model="field.value.mm"
                                     type="number"
-                                    label="MM"
+                                    label="Month"
                                     number
                                     name="mm"
                                     :value="field.value.mm"
                                     :validation-rules="{ validateDate }"
                                     validation="validateDate"
                                     @input="validateDate(field.type, i)"
+                                    validation-visibility="live"
                                 />
 
                                 <FormKit
                                     v-model="field.value.dd"
                                     type="number"
-                                    label="DD"
+                                    label="Day"
                                     number
                                     name="dd"
                                     :value="field.value.dd"
                                     :validation-rules="{ validateDate }"
                                     validation="validateDate"
                                     @input="validateDate(field.type, i)"
+                                    validation-visibility="live"
                                 />
 
                                 <FormKit
                                     v-model="field.value.yyyy"
                                     type="number"
-                                    label="YYYY"
+                                    label="Year"
                                     number
                                     name="yyyy"
                                     :value="field.value.yyyy"
                                     :validation-rules="{ validateDate }"
                                     validation="validateDate"
                                     @input="validateDate(field.type, i)"
+                                    validation-visibility="live"
                                 />
                             </FormKit>
                         </div>
@@ -295,8 +298,12 @@
                                     name="full_name"
                                     help=""
                                     placeholder="Full Name"
-                                    validation="required|length:3"
+                                    :validation="field.validation.full_name"
+
+                                    :user_name_valid="userNameValid = valid"
                                     @input="validateUserName(field, valid, 'full_name', i)"
+                                    @animationstart="checkAnimation"
+                                    validation-visibility="live"
                                 />
 
                                 <FormKit
@@ -306,8 +313,12 @@
                                     name="last_name"
                                     help=""
                                     placeholder="Last Name"
-                                    validation="required|length:3"
+                                    :validation="field.validation.last_name"
+
+                                    :user_name_valid="userNameValid = valid"
                                     @input="validateUserName(field, valid, 'last_name', i)"
+                                    @animationstart="checkAnimation"
+                                    validation-visibility="live"
                                 />
                             </template>
 
@@ -326,23 +337,27 @@
                                         name="address"
                                         label="Address"
                                         type="text"
-                                        validation="required|length:10"
+                                        :validation="field.validation.address"
                                         @input="validateAddress(field, 'address', i, $event.value, valid)"
+                                        @animationstart="checkAnimation"
                                     />
                                     <FormKit
                                         v-model="field.value.unit"
                                         name="unit"
                                         label="Unit #"
                                         type="text"
-                                        validation="required|number"
+                                        :validation="field.validation.unit"
                                         @input="validateAddress(field, 'unit', i, $event.value, valid)"
+                                        @animationstart="checkAnimation"
                                     />
                                     <FormKit
                                         v-model="field.value.apt"
                                         name="apt"
                                         label="Apt or unit (optional)"
                                         type="text"
+                                        :validation="field.validation.apt"
                                         @input="validateAddress(field, 'apt', i, $event.value, valid)"
+                                        @animationstart="checkAnimation"
                                     />
 
                                     <div class="select_dropdown">
@@ -360,16 +375,14 @@
                                         label="Enter ZIP Code"
                                         type="text"
                                         name="zip"
-                                        validation="required|number"
+                                        :validation="field.validation.zip"
                                         @input="validateAddress(field, 'zip', i, $event.value, valid)"
+                                        @animationstart="checkAnimation"
                                     />
                                 </template>
                             </FormKit>
 
                         </div>
-
-                        <div v-if="debug">{{ field.value }}</div>
-                        <div v-if="debug">{{ field.complete }}</div>
                     </li>
 
                     <li v-if="field.type === 'address_v2' && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--address_v2_mod', {show: field.show, complete: field.complete} ]">
@@ -383,22 +396,25 @@
                                         name="address"
                                         label="Address"
                                         type="text"
-                                        validation="required|length:10"
+                                        :validation="field.validation.address"
                                         @input="validateAddress(field, 'address', i, $event.value, valid)"
+                                        @animationstart="checkAnimation"
                                     />
                                     <FormKit
                                         name="unit"
                                         label="Unit #"
                                         type="text"
-                                        validation="required|number"
+                                        :validation="field.validation.unit"
                                         @input="validateAddress(field, 'unit', i, $event.value, valid)"
+                                        @animationstart="checkAnimation"
                                     />
                                     <FormKit
                                         name="city"
                                         label="City"
                                         type="text"
-                                        validation="required|length:3"
+                                        :validation="field.validation.city"
                                         @input="validateAddress(field, 'city', i, $event.value, valid)"
+                                        @animationstart="checkAnimation"
                                     />
 
                                     <div class="select_dropdown">
@@ -415,8 +431,9 @@
                                         label="Enter ZIP Code"
                                         type="text"
                                         name="zip"
-                                        validation="required"
+                                        :validation="field.validation.zip"
                                         @input="validateAddress(field, 'zip', i, $event.value, valid)"
+                                        @animationstart="checkAnimation"
                                     />
                                 </template>
                             </FormKit>
@@ -431,7 +448,7 @@
                             label="lbs."
                             number
                             name="lbs"
-                            validation="required|number"
+                            :validation="field.validation"
                             :delay="500"
                             @input="scrollController(field.type, i)"
                         />
@@ -455,7 +472,7 @@
                                         label="ft."
                                         number
                                         name="ft"
-                                        validation="required|number"
+                                        :validation="field.validation.ft"
                                         :delay="500"
                                         @input="scrollController(field.type, i)"
                                     />
@@ -465,7 +482,7 @@
                                         label="in."
                                         number
                                         name="in"
-                                        validation="required|number"
+                                        :validation="field.validation.in"
                                         :delay="500"
                                         @input="scrollController(field.type, i)"
                                     />
@@ -479,25 +496,31 @@
                     <li v-if="['text', 'number', 'email'].includes(field.type) && tabPosition(i) === tab.active" :ref="'qs' + i" :key="field.title" :class="[ 'q_item', 'id'+i, 'q_item--text_one', 'q_item--field_type__'+field.type, {show: field.show, complete: field.complete} ]">
                         <question-header :title="field.title" :descr="field.descr" />
 
-                        <FormKit name="user_email" type="group">
-                            <template #default="{ value, state: { valid } }">
+                        <FormKit :name="'user_' + field.type" type="group">
+                            <template #default="{ state: { valid } }">
                                 <FormKit
                                     v-model="field.value"
                                     :type="field.type"
                                     :name="field.name || field.title"
                                     :validation="field.validation"
-                                    @input="validateText(field, i, valid)"
+                                    :delay="0"
+
+                                    validation-visibility="live"
+                                    @animationstart="checkAnimation"
+                                    :complete="field.complete = valid"
+                                    @input="validateText(field, i)"
                                 />
                             </template>
                         </FormKit>
-
-                        <div v-if="debug">{{ field.value }}</div>
                     </li>
 
                 </template>
 
                 <li :class="['button_next_tab', { done: !isTabs }]" ref="btnNextTab_1" v-show="tab.active === 0 && tab.complete[0]">
-                    <button type="button" @click="goTab(1, true)">Next Step</button>
+                    <button type="button" @click="goTab(1, true)">
+                        <span v-if="isTabs">Next Step</span>
+                        <span v-if="!isTabs">Send Request</span>
+                    </button>
                 </li>
 
                 <li :class="['button_next_tab']" ref="btnNextTab_2" v-show="isTabs && tab.active === 1 && tab.complete[0] && tab.complete[1]">
@@ -505,7 +528,7 @@
                 </li>
 
                 <li :class="['button_next_tab', { done: isTabs }]" ref="btnNextTab_3" v-show="isTabs && tab.active === 2 && tab.complete[0] && tab.complete[1] && tab.complete[2]">
-                    <button type="button" @click="goTab(3, true)">Next Step</button>
+                    <button type="button" @click="goTab(3, true)">Get my good quotes</button>
                 </li>
 
                 <privacy-policy :show-no-spam-info="!isTabs" v-if="showPrivacyPolicy" />
@@ -516,10 +539,6 @@
 
         <done v-if="showDonePage" :sendContentAjax="sendContent" :homeUrl="paramsPhp.homeUrl" :class="formModClass" />
     </div>
-
-<!--    <div class="help help1" ref="help1"></div>-->
-<!--    <div class="help help2" ref="help2"></div>-->
-<!--    <div class="help help3" ref="help3"></div>-->
 </template>
 
 
@@ -529,9 +548,10 @@ import moment from 'moment'
 import QuestionHeader from './parts/QuestionHeader.vue'
 import Done from './parts/Done.vue'
 import PrivacyPolicy from './parts/PrivacyPolicy.vue'
-import SelectDropdown from "./parts/SelectDropdown.vue";
-import IconOk from "./parts/IconOk.vue";
-import axios from "axios"
+import SelectDropdown from './parts/SelectDropdown.vue'
+import IconOk from './parts/IconOk.vue'
+import axios from 'axios'
+import {motorcycleCheckbox, motorcycleDatabase} from '../assets/data/moto.js'
 
 export default {
     components: { Done, PrivacyPolicy, SelectDropdown, QuestionHeader, IconOk },
@@ -545,10 +565,13 @@ export default {
             questions: this.qs.map((q, i) => { q.id = i; return q }),
             tab: {active: 0, complete: [0, 0, 0, 0], available: [0, 0, 0, 0]},
             nav: { auto: ['Vehicles', 'Drivers', 'Final Details', 'Quotes'], home: ['Home', 'Owner', 'Final Details', 'Quotes'] },
-            tabs: { auto: [8, 19, -1], home: [8, 15, -1] }, // Only tabs with a list of questions, do not include the final tab. -1 === All other questions
+            tabs: { auto: [13, 24, -1], home: [8, 15, -1] }, // Only tabs with a list of questions, do not include the final tab. -1 === All other questions
             isValidDate: {mm: false, dd: false, yyyy: false},
+            userNameValid: false,
             userNameObj: '',
             auto_make: '',
+            company_name: '',
+            autofilled: false,
         }
     },
     computed: {
@@ -584,8 +607,9 @@ export default {
             const inxBirth = Number.parseInt(this.questions.findIndex(q => q.type === 'user_birth'))
             const inxUserName = Number.parseInt(this.questions.findIndex(q => q.type === 'user_name'))
             const inxSelectAuto = Number.parseInt(this.questions.findIndex(q => q.type === 'select_auto'))
-            const inxAddress = Number.parseInt(this.questions.findIndex(q => q.type === 'address'))
-                || Number.parseInt(this.questions.findIndex(q => q.type === 'address_v2'))
+
+            const inxAddr = Number.parseInt(this.questions.findIndex(q => q.type === 'address'))
+            const inxAddress = inxAddr >= 0 ? inxAddr : Number.parseInt(this.questions.findIndex(q => q.type === 'address_v2'))
 
             return {
                 email: isNaN(inxEmail) ? -1 : inxEmail,
@@ -600,7 +624,7 @@ export default {
         },
         showPrivacyPolicy() {
             if (this.isTabs) {
-                return this.tab.active < this.tabs[this.form].length && this.tab.complete[this.tab.active]
+                return this.tab.active === this.tabs[this.form].length - 1 && this.tab.complete[this.tab.active]
             } else {
                 return this.tab.active !== 1 && this.tab.complete[this.tab.active]
             }
@@ -626,6 +650,10 @@ export default {
                 return title.replace('%%auto_make%%', this.autoMake)
             }
 
+            if (title.includes('%%company_name%%')) {
+                return title.replace('%%company_name%%', this.company_name)
+            }
+
             return title
         },
 
@@ -637,63 +665,51 @@ export default {
                 self.scrollController(fieldType, id)
             }
 
-            if (fieldType === 'select_auto__model') {
-                return
-            }
 
             if (fieldType === 'select_auto__year') {
 
-                self.questions[0].load.makes = true
-                self.questions[0].value.auto_make = ''
-                self.questions[0].value.auto_model = ''
+                const elem = document.querySelector('.q_item--select_auto.id' + id)
+                if (elem) this.scrollToSmoothly(this.getCoords(elem).top - 80)
 
-                axios.get("https://car-api2.p.rapidapi.com/api/makes", {
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-RapidAPI-Key': '1f6b885bedmshda406e131f6f802p18a97cjsn71cf71c2568c',
-                        'X-RapidAPI-Host': 'car-api2.p.rapidapi.com'
-                    },
-                    params: {
-                        direction: 'asc',
-                        sort: 'id'
-                    }
-                })
-                    .then(function (response) {
-                        self.questions[0].options.makes = [self.questions[0].options.makes[0], ...response.data.data.map(obj => obj.name)]
-                    })
-                    .catch(function (error) {
-                        console.log(error.message)
-                    })
-                    .finally(function () {
-                        self.questions[0].load.makes = false
-                    })
+                const year = self.questions[id].value.auto_year
+
+                if (!!year) {
+                    self.questions[id].load.makes = true
+                    self.questions[id].value.auto_make = ''
+                    self.questions[id].value.auto_model = ''
+
+                    axios.get('https://www.fueleconomy.gov/ws/rest/vehicle/menu/make?year=' + year)
+                        .then(function (data) {
+                            const response = data.request.response
+                            const obj = JSON.parse(response)
+                            const arr = obj.menuItem.map(elem => elem.value)
+                            self.questions[id].options.makes = [self.questions[id].options.makes[0], ...arr]
+                        })
+                        .catch(function (error) {
+                            console.log(error.message)
+                        })
+                        .finally(function () {
+                            self.questions[id].load.makes = false
+                        })
+                }
             }
 
-            if (fieldType === 'select_auto__makes') {
+            if (fieldType === 'select_auto__makes' && !!self.questions[0].value.auto_make) {
 
                 self.questions[0].load.models = true
 
-                const host = 'mc-api.marketcheck.com'
-                const api_key = 'bb2c8c2c-b483-44d9-a955-f7568a3b1091'
+                const host = 'www.fueleconomy.gov'
                 const make = self.questions[0].value.auto_make
                 const year = self.questions[0].value.auto_year
-                const url1 = 'https://' + host + '/v2/search/car/active?api_key=' + api_key + '&year=' + year + '&make=' + make + '&include_relevant_links=true'
-                const url = 'https://' + host + '/v2/search/car/active'
+                const url = 'https://' + host + '/ws/rest/vehicle/menu/model?year=' + year + '&make=' + make
 
-                axios.get(url, {
-                    headers: {},
-                    params: {
-                        api_key,
-                        year,
-                        make,
-                        include_relevant_links: !true,
-                    }
-                })
-                    .then(function (response) {
-                        self.questions[0].options.models = [
-                            self.questions[0].options.models[0],
-                            ...response.data.listings.map(obj => obj.build.model)
-                        ]
+                axios.get(url)
+                    .then(function (data) {
+                        const response = data.request.response
+                        const obj = JSON.parse(response)
+                        const arr = obj.menuItem.map(elem => elem.value)
+
+                        self.questions[0].options.models = [ self.questions[0].options.models[0], ...arr ]
                     })
                     .catch(function (error) {
                         console.log(error.message)
@@ -717,11 +733,49 @@ export default {
                 this.auto_make = value
             }
         },
-        validateSelect(value, i, fieldType) {
+        validateSelect(value, i, field) {
             this.questions[i].value = value
             this.questions[i].complete = !!value
 
-            this.scrollController(fieldType, i)
+            if (field.key === 'select_company') {
+                this.company_name = value
+            }
+
+            this.scrollController(field.type, i)
+        },
+        validateRadioAndSelect(value, field, type, i) {
+
+            if (type === 'radio') {
+                const select = document.getElementById('radio_and_select__select')
+                const option = select.querySelector('.item')
+
+                if (select && option) {
+                    const selected = select.querySelector('.selected')
+                    selected.innerHTML = option.innerHTML
+                    select.querySelectorAll('.item').forEach(elem => elem.classList.remove('selected_value'))
+                }
+            }
+
+            if (type === 'select') {
+                field.value = value
+            }
+
+            this.setMotorcycleModels(field)
+            this.scrollController(field.type, i)
+        },
+        validateRadio(field, i) {
+            if (field.key === 'add_second_vehicle') {
+                const self = this
+                setTimeout(() => {
+                    if ('yes' === field.value?.toLowerCase()) {
+                        self.tabs.auto = [13, 24, -1]
+                    } else {
+                        self.tabs.auto = [8, 19, -1]
+                    }
+                }, 0)
+            }
+
+            this.scrollController(field.type, i)
         },
         validateDate(node, id) {
             if (node === 'user_birth') {
@@ -818,34 +872,84 @@ export default {
                 return -1
             }
         },
-        validateUserName(field, valid, fieldType, id) {
-            field.complete = valid
-            this.userNameObj = field.value
-            this.scrollController(fieldType, id)
+        validateUserName(field, valid, key, id) {
+
+            setTimeout(() => {
+                if (this.autofilled) {
+                    field.complete = !!field.value.full_name && !!field.value.last_name
+                } else {
+                    field.complete = this.userNameValid
+                    field.onInput = true
+                    this.userNameObj = field.value
+                }
+            }, 300)
+
+            this.scrollController(key, id)
         },
         validateAddress(field, name, id, value, valid) {
+            const self = this
 
-            let selectedState = !!field.value.state
+            setTimeout(() => {
 
-            if (name === 'state') {
-                field.value.state = value
-                selectedState = !!value
+                let selectedState = !!field.value.state
+
+                if (name === 'state') {
+                    field.value.state = value
+                    selectedState = !!value
+                }
+
+                if (this.autofilled) {
+                    setTimeout(() => {
+                        field.complete = !!field.value.address && !!field.value.unit && !!field.value.state && !!field.value.zip
+                    }, 0)
+                } else {
+                    field.complete = valid && selectedState
+                    field.onInput = true
+                }
+
+                self.setStatusCompleteQuestions()
+
+                self.scrollController(field.type, id)
+
+            }, 0)
+        },
+        validateText(field, id) {
+
+            if (self.autofilled) {
+                field.complete = !!field.value
             }
-
-            field.complete = valid && selectedState
-
-            this.setStatusCompleteQuestions()
 
             this.scrollController(field.type, id)
         },
-        validateText(field, id, valid) {
-            field.complete = false
 
-            if (field.value.length > 1) {
-                field.complete = valid
+        /** Check Autofill */
+        checkAnimation(e) {
+            if(e.animationName === "onAutoFillStart") {
+                this.autofilled = true;
             }
+            else if(e.animationName === "onAutoFillCancel") {
+                this.autofilled = false;
+            }
+        },
 
-            this.scrollController(field.type, id)
+        /** Set options motorcycle models  */
+        setMotorcycleModels(fieldSelectMotorcycleMake) {
+            setTimeout(() => {
+                if (fieldSelectMotorcycleMake.key === 'select_motorcycle_make') {
+                    const fieldSelectModels = this.qs.find(q => q.key === 'select_motorcycle_models')
+
+                    if (fieldSelectModels) {
+                        const options = motorcycleDatabase
+                            .filter(obj => obj.make.toLowerCase() === fieldSelectMotorcycleMake.value.toLowerCase())
+
+                        if (!options[0]?.models.length) {
+                            fieldSelectModels.options = [ fieldSelectMotorcycleMake.value ]
+                        } else {
+                            fieldSelectModels.options = options[0]?.models
+                        }
+                    }
+                }
+            }, 0)
         },
 
         /** Set Status Complete -- Validation */
@@ -867,6 +971,11 @@ export default {
                         // Name, Birth, Address
                         if ([this.inxQuestion.userName, this.inxQuestion.birth, this.inxQuestion.address].includes(inxQ)) {
                             complete = q.complete
+
+                            if (q.type === 'user_name' && !q.onInput) {
+                                q.onInput = false
+                                complete = !!q.value.full_name && !!q.value.last_name
+                            }
                         }
 
                         // Для всих остальних
@@ -876,7 +985,7 @@ export default {
                     }
 
 
-                        // TYPE Checkbox
+                    // TYPE Checkbox
                     // Value is Array
                     else if (typeof q.value === 'object' && Array.isArray(q.value) && q.value !== null) {
                         complete = q.value.length > 0
@@ -884,7 +993,10 @@ export default {
 
                     // Email
                     else if (['email', 'text', 'number'].includes(q.type)) {
-                        complete = q.complete
+                        complete = q.complete === undefined ? !!q.value : q.complete
+
+                        // if (q.title === 'What year was your home built?')
+                        //     console.log('set status: ', q.title, q.complete)
                     }
 
                     // Value is String
@@ -895,7 +1007,6 @@ export default {
 
                 q.complete = complete
             })
-
 
         },
 
@@ -957,6 +1068,22 @@ export default {
             }
 
             this.tab.available[this.tab.available.length - 1] = 0
+        },
+        managerShowQuestions() {
+            this.questions.forEach((q, i, questions) => {
+                if (q.show && q.complete) {
+                    const next = questions[i + 1]
+                    if (next) next.show = true
+                }
+                if (q.show && !q.complete) {
+                    const next = questions[i + 1]
+                    if (next) next.show = false
+                }
+                if (!q.show) {
+                    const next = questions[i + 1]
+                    if (next) next.show = false
+                }
+            })
         },
         goTab(tab, isButton = false) {
             this.tab.active = tab
@@ -1095,7 +1222,7 @@ export default {
                     },
                 },
                 success: function (data) {
-                    console.log('send: ', data)
+                    console.log('success!')
                 },
                 error: function (error) {
                     console.log(error.message)
@@ -1108,14 +1235,6 @@ export default {
         this.managerTabs()
         this.moveElement()
         window.scrollTo(0, 0)
-        // document.addEventListener('scroll', () => {
-        //     // // на скільки сторінка прокручена вгору
-        //     //this.scrollTop = window.pageYOffset || document.documentElement.scrollTop
-        //     // // відстань від верху вікна перегляду до верху елемента
-        //     // elem.getBoundingClientRect().top
-        //     // // прокрутити сторінку щоб елемент був на певній відстані ($offsetTop) від верху вікна перегляду
-        //     // window.scrollTop = scrollTop + elem.getBoundingClientRect().top - $offsetTop
-        // })
     },
     watch: {
         questions: {
@@ -1123,20 +1242,7 @@ export default {
             handler(val, oldVal) {
                 this.setStatusCompleteQuestions()
                 this.managerTabs()
-                this.questions.forEach((q, i, questions) => {
-                    if (q.show && q.complete) {
-                        const next = questions[i + 1]
-                        if (next) next.show = true
-                    }
-                    if (q.show && !q.complete) {
-                        const next = questions[i + 1]
-                        if (next) next.show = false
-                    }
-                    if (!q.show) {
-                        const next = questions[i + 1]
-                        if (next) next.show = false
-                    }
-                })
+                this.managerShowQuestions()
             }
         }
     },

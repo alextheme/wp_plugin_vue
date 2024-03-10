@@ -37,6 +37,9 @@ class Shortcode {
 
         wp_localize_script( 'sfi_app_js', 'sfi_params', [
             'homeUrl' => home_url(),
+            'privacy_policy_link' => 'privacy-policy',
+            'terms_use_link' => 'privacy-policy',
+            'listed_businesses_link' => '',
             'adminUri' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce(SFI_NONCE),
         ]);
