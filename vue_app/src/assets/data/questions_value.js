@@ -13,47 +13,46 @@ const auto = () => {
     q.auto[4].value = 'Full Coverage'
     q.auto[5].value = '$1000'
     q.auto[6].value = '$1000'
-    q.auto[7].value = 'Yes'
-
-
-    q.auto[8].value.auto_year = 1999
-    q.auto[8].value.auto_make = 'Audi'
-    q.auto[8].value.auto_model = 'A3'
-
-    q.auto[9].value = 'Pleasure'
-    q.auto[10].value = 20
-    q.auto[11].value = 'Finance'
-    q.auto[12].value = 'Full Coverage'
-
-    q.auto[13].value.full_name = 'Oleksandr'
-    q.auto[13].value.last_name = 'Borymskyi'
-
-    q.auto[14].value.mm = 5
-    q.auto[14].value.dd = 25
-    q.auto[14].value.yyyy = 2000
-
-    q.auto[15].value = 'Male'
-    q.auto[16].value = 'Yes'
-    q.auto[17].value = 'Some College'
-
-    q.auto[18].value = 'Architect'
-    q.auto[19].value = 'Good (600-700)'
-    q.auto[20].value = 'Permit'
-    q.auto[21].value = 'No'
-    q.auto[22].value = 'No'
-    q.auto[23].value = 'Yes'
-
-    q.auto[24].value = 'Yes'
-    q.auto[25].value = 'Basic'
-    q.auto[26].value = 'No'
-    q.auto[27].value = 'Own'
-    q.auto[28].value = 'Townhome'
-
-    q.auto[29].value.address = 'Shevchenko, 45, Berdychiv'
-    q.auto[29].value.unit = '1234'
-    q.auto[29].value.apt = ''
-    q.auto[29].value.state = 'MN'
-    q.auto[29].value.zip = '4321'
+    // q.auto[7].value = 'No'
+    //
+    // q.auto[8].value.auto_year = 1999
+    // q.auto[8].value.auto_make = 'Audi'
+    // q.auto[8].value.auto_model = 'A3'
+    //
+    // q.auto[9].value = 'Pleasure'
+    // q.auto[10].value = 20
+    // q.auto[11].value = 'Finance'
+    // q.auto[12].value = 'Full Coverage'
+    //
+    // q.auto[13].value.full_name = 'Oleksandr'
+    // q.auto[13].value.last_name = 'Borymskyi'
+    //
+    // q.auto[14].value.mm = 5
+    // q.auto[14].value.dd = 25
+    // q.auto[14].value.yyyy = 2000
+    //
+    // q.auto[15].value = 'Male'
+    // q.auto[16].value = 'Yes'
+    // q.auto[17].value = 'Some College'
+    //
+    // q.auto[18].value = 'Architect'
+    // q.auto[19].value = 'Good (600-700)'
+    // q.auto[20].value = 'Permit'
+    // q.auto[21].value = 'No'
+    // q.auto[22].value = 'No'
+    // q.auto[23].value = 'Yes'
+    //
+    // q.auto[24].value = 'Yes'
+    // q.auto[25].value = 'Basic'
+    // q.auto[26].value = 'No'
+    // q.auto[27].value = 'Own'
+    // q.auto[28].value = 'Townhome'
+    //
+    // q.auto[29].value.address = 'Shevchenko, 45, Berdychiv'
+    // q.auto[29].value.unit = '1234'
+    // q.auto[29].value.apt = ''
+    // q.auto[29].value.state = 'MN'
+    // q.auto[29].value.zip = '4321'
 }
 const home = () => {
     q.home[0].value = 'Townhome'
@@ -244,7 +243,7 @@ const renters = () => {
 }
 
 
-// auto()
+auto()
 // home()
 // life()
 // health()

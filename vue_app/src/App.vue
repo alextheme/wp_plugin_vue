@@ -10,8 +10,8 @@
 <script>
 import Forms from './components/Forms.vue'
 import Auto from './components/Auto.vue'
-import questions from './assets/data/questions.js'
-// import questions from './assets/data/questions_value.js'
+// import questions from './assets/data/questions.js'
+import questions from './assets/data/questions_value.js'
 // window.formId = 'test'
 
 export default {

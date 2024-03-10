@@ -873,6 +873,7 @@ export default {
 
         /** Send Content */
         sendContent() {
+            let isSecondAuto = false
 
             // Create Html Content for PDF File
             let content = '<div>'
@@ -882,7 +883,13 @@ export default {
             content += `<br>`
             this.questions.forEach(qsn => {
 
-                console.log(qsn.value)
+                if (qsn.key === 'add_second_vehicle') {
+                    isSecondAuto = qsn.value.toLowerCase() === 'yes'
+                }
+
+                if (!isSecondAuto && qsn.group === 'vehicle2') {
+                    return
+                }
 
                 let value = ''
                 switch (qsn.type) {
